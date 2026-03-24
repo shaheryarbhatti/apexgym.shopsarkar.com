@@ -104,6 +104,82 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .member-attendance-card {
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 18px 40px rgba(18, 38, 63, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-attendance-card::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            right: -90px;
+            top: -90px;
+            background: radial-gradient(circle, rgba(115, 103, 240, 0.16), transparent 70%);
+            z-index: 0;
+        }
+
+        .member-attendance-header {
+            position: relative;
+            z-index: 1;
+        }
+
+        .member-attendance-table thead th {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #8b95a7;
+            border-bottom: 1px solid #eef2f7 !important;
+        }
+
+        .member-attendance-table td {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border-color: #f2f4f9 !important;
+            font-weight: 600;
+            color: #1f2a37;
+        }
+
+        .attendance-status {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .attendance-status.in-gym {
+            background: rgba(245, 158, 11, 0.15);
+            color: #b45309;
+        }
+
+        .attendance-status.completed {
+            background: rgba(34, 197, 94, 0.15);
+            color: #15803d;
+        }
+
+        .attendance-view-btn {
+            border-radius: 999px;
+            padding: 6px 18px;
+            font-weight: 700;
+            border-width: 2px;
+        }
+
+        .member-attendance-left {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+
+        .member-attendance-left .attendance-action {
+            margin-top: auto;
+        }
     </style>
     <div class="page-body">
         <div class="container-fluid">
@@ -357,29 +433,26 @@
 
             @else
             <div class="row">
-                <div class="col-md-8 col-lg-5 mx-auto py-5 text-center">
-                    <div class="card shadow-lg border-0 p-4" style="border-radius: 30px; background: #fff;">
-                        <div class="mb-4">
-                            <div class="mx-auto bg-light rounded-circle d-flex align-items-center justify-content-center shadow-inner"
-                                style="width: 100px; height: 100px;">
-                                <i class="fa-solid fa-clock fa-3x text-secondary"></i>
-                            </div>
+                <div class="col-xl-6 mb-4">
+                    <div class="card shadow-lg border-0 p-4 h-100 member-attendance-left" style="border-radius: 26px; background: #fff;">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="fw-bold mb-0 text-dark">{{ __('Member Attendance') }}</h4>
+                            <span class="badge bg-light text-dark">{{ date('d M Y') }}</span>
                         </div>
-                        <h2 class="fw-bold mb-3 text-dark">{{ __('Member Attendance') }}</h2>
-                        <p class="text-muted px-4 mb-4">{{ __('attendance_instruction') }}</p>
+                        <p class="text-muted mb-4">{{ __('attendance_instruction') }}</p>
 
-                        <form action="{{ route('attendance.store') }}" method="POST">
+                        <form action="{{ route('attendance.store') }}" method="POST" class="attendance-action">
                             @csrf
                             @if(!$isCheckedIn)
                             <button type="submit" name="action" value="checkin"
                                 class="btn btn-lg w-100 shadow-lg text-white"
-                                style="background: linear-gradient(to right, #00b09b, #96c93d); border-radius: 20px; padding: 20px; border: none;">
+                                style="background: linear-gradient(to right, #00b09b, #96c93d); border-radius: 18px; padding: 18px; border: none;">
                                 <i class="fa fa-sign-in fa-lg me-2"></i> <strong>{{ __('CHECK IN NOW') }}</strong>
                             </button>
                             @else
                             <button type="submit" name="action" value="checkout"
                                 class="btn btn-lg w-100 shadow-lg text-white"
-                                style="background: linear-gradient(to right, #ff416c, #ff4b2b); border-radius: 20px; padding: 20px; border: none;">
+                                style="background: linear-gradient(to right, #ff416c, #ff4b2b); border-radius: 18px; padding: 18px; border: none;">
                                 <i class="fa fa-sign-out fa-lg me-2"></i> <strong>{{ __('CHECK OUT NOW') }}</strong>
                             </button>
                             <p class="mt-3 text-success"><i class="fa fa-circle me-1"></i> {{ __('You are currently in the gym') }}
@@ -388,8 +461,56 @@
                         </form>
 
                         <div class="mt-4 border-top pt-3">
-                            <h6 class="text-muted mb-0">Today: <span class="text-dark">{{ date('l, d M Y') }}</span>
+                            <h6 class="text-muted mb-0">{{ __('Today') }}: <span class="text-dark">{{ date('l, d M Y') }}</span>
                             </h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 mb-4">
+                    <div class="card member-attendance-card border-0 p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3 member-attendance-header">
+                            <div>
+                                <h4 class="fw-bold mb-1 text-dark">{{ __('Last 5 Attendance') }}</h4>
+                                <small class="text-muted">{{ __('Track your recent check-ins quickly') }}</small>
+                            </div>
+                            <a href="{{ route('member.attendance') }}" class="btn btn-outline-primary btn-sm attendance-view-btn">
+                                {{ __('View All') }}
+                            </a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0 member-attendance-table">
+                                <thead>
+                                    <tr>
+                                        <th>{{ __('Date') }}</th>
+                                        <th>{{ __('Check In') }}</th>
+                                        <th>{{ __('Check Out') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($memberRecentAttendance as $row)
+                                        <tr>
+                                            <td>{{ optional($row->attendance_date)->format('d M Y') ?? '-' }}</td>
+                                            <td>{{ optional($row->checkin_time)->format('h:i A') ?? '-' }}</td>
+                                            <td>{{ optional($row->checkout_time)->format('h:i A') ?? '-' }}</td>
+                                            <td>
+                                                @if($row->checkout_time)
+                                                    <span class="attendance-status completed">Completed</span>
+                                                @else
+                                                    <span class="attendance-status in-gym">In Gym</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted py-3">
+                                                {{ __('No attendance records found.') }}
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

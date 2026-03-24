@@ -7,17 +7,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Sky Fitness Gym – premium gym portal. Book sessions, track attendance, manage membership & payments online. Transform your fitness journey with SkyFitnessGym.com">
-    <meta name="keywords"
-        content="gym management system, fitness portal, gym membership online, online gym booking, fitness tracking app, gym attendance system, personal training portal, gym payment online, sky fitness gym, skyfitnessgym, fitness progress tracker, workout planner online">
-    <meta name="author" content="skyfitnessgym.com">
     <title>{{ __('manage_members') }}</title>
 
     @extends('layouts.app')
     @section('content')
-    @php
+@php
         $cardBg = \App\Models\Setting::get('card_bg_color', '#0b1d2c');
+        $cardTextColor = \App\Models\Setting::get('card_text_color', '#ffffff');
         $cardTitle = \App\Models\Setting::get('card_title', 'Membership Card');
         $logoSource = \App\Models\Setting::get('card_logo_source', 'login');
         $cardLogoPath = $logoSource === 'admin'
@@ -102,7 +98,7 @@
                 <div class="row g-4 align-items-start">
                     <div class="col-lg-5">
                         <div class="d-flex flex-column align-items-center">
-                            <div class="member-card-preview" style="background: {{ $cardBg }};">
+                            <div class="member-card-preview" style="background: {{ $cardBg }}; color: {{ $cardTextColor }};">
                                 <img src="{{ $cardLogoUrl }}" alt="Logo" class="member-card-logo">
                                 <div class="member-card-title" id="memberCardTitle">{{ $cardTitle }}</div>
                                 <div class="member-card-name" id="memberCardName">-</div>

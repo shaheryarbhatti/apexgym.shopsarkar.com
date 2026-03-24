@@ -47,7 +47,13 @@
     $themePrimary = \App\Models\Setting::get('theme_primary', '#7367f0');
     $themeSecondary = \App\Models\Setting::get('theme_secondary', '#00cfe8');
     $themeAccent = \App\Models\Setting::get('theme_accent', '#0f9b8e');
+    $metaKeywords = \App\Models\Setting::get('meta_keywords', 'gym, fitness, membership, attendance, payments');
+    $metaDescription = \App\Models\Setting::get('meta_description', 'Gym management system for memberships, attendance, and billing.');
+    $metaAuthor = \App\Models\Setting::get('meta_author', 'Sky Fitness Gym');
 @endphp
+<meta name="keywords" content="{{ $metaKeywords }}">
+<meta name="description" content="{{ $metaDescription }}">
+<meta name="author" content="{{ $metaAuthor }}">
 <style>
     :root {
         --theme-default: {{ $themePrimary }};

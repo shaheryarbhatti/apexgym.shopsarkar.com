@@ -5,8 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sky Fitness Gym – premium gym portal.">
-    <meta name="author" content="skyfitnessgym.com">
     <title>{{ __('system_settings') }}</title>
 
 @extends('layouts.app')
@@ -19,6 +17,10 @@
     $baseCurrencyCode = \App\Models\Setting::get('base_currency_code', 'IDR');
     $baseCurrency = \App\Models\Currency::where('code', $baseCurrencyCode)->first();
     $baseLabel = $baseCurrency ? trim($baseCurrency->symbol . ' ' . $baseCurrency->code) : $baseCurrencyCode;
+    $themePrimary = \App\Models\Setting::get('theme_primary', '#7367f0');
+    $themeSecondary = \App\Models\Setting::get('theme_secondary', '#00cfe8');
+    $themeAccent = \App\Models\Setting::get('theme_accent', '#0f9b8e');
+    $sidebarDashboardTextColor = \App\Models\Setting::get('sidebar_dashboard_text_color', '#ffffff');
 @endphp
 <script>
     window.gymCurrency = {
@@ -86,23 +88,23 @@
         padding: 8px 16px;
         font-weight: 700;
         background: #f5f7fb;
-        color: #1f2937;
+        color: {{ $themeAccent }};
         border: 1px solid transparent;
         transition: all 0.2s ease;
     }
     .settings-tabs .nav-link:hover,
     .settings-tabs .nav-link:focus {
-        background: #e9f2ff;
-        border-color: rgba(59, 130, 246, 0.25);
-        color: #1d4ed8;
+        background: rgba(15, 118, 110, 0.08);
+        border-color: {{ $themeSecondary }};
+        color: {{ $themePrimary }};
         transform: translateY(-1px);
-        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.15);
+        box-shadow: 0 6px 12px rgba(15, 118, 110, 0.18);
     }
     .settings-tabs .nav-link.active {
-        background: linear-gradient(135deg, #2563eb, #06b6d4);
-        color: #fff;
+        background: linear-gradient(135deg, {{ $themePrimary }}, {{ $themeSecondary }});
+        color: {{ $sidebarDashboardTextColor }};
         border-color: transparent;
-        box-shadow: 0 10px 18px rgba(37, 99, 235, 0.28);
+        box-shadow: 0 10px 18px rgba(15, 118, 110, 0.25);
     }
     .settings-section {
         scroll-margin-top: 110px;
@@ -128,6 +130,9 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-login-text">{{ __('settings_tab_login_text') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#settings-meta-tags">{{ __('settings_tab_meta_tags') }}</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-smtp">{{ __('settings_tab_smtp') }}</a>
@@ -233,6 +238,17 @@
                                                placeholder="#0f9b8e">
                                     </div>
                                 </div>
+
+                                <div class="col-xl-4 col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_sidebar_dashboard_text_color') }}</label>
+                                    <div class="input-group">
+                                        <input type="color" name="sidebar_dashboard_text_color" class="form-control form-control-color"
+                                               value="{{ \App\Models\Setting::get('sidebar_dashboard_text_color', '#ffffff') }}">
+                                        <input type="text" name="sidebar_dashboard_text_color_text" class="form-control"
+                                               value="{{ \App\Models\Setting::get('sidebar_dashboard_text_color', '#ffffff') }}"
+                                               placeholder="#ffffff">
+                                    </div>
+                                </div>
                             </div>
 
                             <hr class="my-4">
@@ -247,6 +263,17 @@
                                     <label class="form-label fw-bold">{{ __('settings_login_heading') }}</label>
                                     <input type="text" name="login_heading" class="form-control"
                                            value="{{ \App\Models\Setting::get('login_heading', 'Train Smarter, Track Faster') }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_login_heading_color') }}</label>
+                                    <div class="input-group">
+                                        <input type="color" name="login_heading_color" class="form-control form-control-color"
+                                               value="{{ \App\Models\Setting::get('login_heading_color', '#ffffff') }}">
+                                        <input type="text" name="login_heading_color_text" class="form-control"
+                                               value="{{ \App\Models\Setting::get('login_heading_color', '#ffffff') }}"
+                                               placeholder="#ffffff">
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-12 mb-3">
@@ -275,6 +302,32 @@
                                                {{ \App\Models\Setting::get('login_barcode_enabled', '1') === '1' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="login_barcode_enabled">{{ __('settings_login_barcode_toggle_desc') }}</label>
                                     </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="row settings-section" id="settings-meta-tags">
+                                <div class="col-12 mb-2">
+                                    <h5 class="mb-1">{{ __('settings_meta_tags') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('settings_meta_tags_desc') }}</p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_meta_author') }}</label>
+                                    <input type="text" name="meta_author" class="form-control"
+                                           value="{{ \App\Models\Setting::get('meta_author', 'Sky Fitness Gym') }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_meta_keywords') }}</label>
+                                    <input type="text" name="meta_keywords" class="form-control"
+                                           value="{{ \App\Models\Setting::get('meta_keywords', 'gym, fitness, membership, attendance, payments') }}">
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_meta_description') }}</label>
+                                    <textarea name="meta_description" class="form-control" rows="3">{{ \App\Models\Setting::get('meta_description', 'Gym management system for memberships, attendance, and billing.') }}</textarea>
                                 </div>
                             </div>
 
@@ -435,6 +488,17 @@
                                 </div>
 
                                 <div class="col-xl-4 col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_card_text_color') }}</label>
+                                    <div class="input-group">
+                                        <input type="color" name="card_text_color" class="form-control form-control-color"
+                                               value="{{ \App\Models\Setting::get('card_text_color', '#ffffff') }}">
+                                        <input type="text" name="card_text_color_text" class="form-control"
+                                               value="{{ \App\Models\Setting::get('card_text_color', '#ffffff') }}"
+                                               placeholder="#ffffff">
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_card_title') }}</label>
                                     <input type="text" name="card_title" class="form-control"
                                            value="{{ \App\Models\Setting::get('card_title', 'Membership Card') }}">
@@ -460,7 +524,7 @@
                                     <div class="border rounded-3 p-3 bg-light">
                                         <div class="d-flex flex-column align-items-center gap-3">
                                             <div id="card-preview"
-                                                 style="width: 220px; height: 360px; border-radius: 18px; background: {{ \App\Models\Setting::get('card_bg_color', '#0b1d2c') }}; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 24px 18px; box-shadow: 0 14px 28px rgba(18, 38, 63, 0.18);">
+                                                 style="width: 220px; height: 360px; border-radius: 18px; background: {{ \App\Models\Setting::get('card_bg_color', '#0b1d2c') }}; color: {{ \App\Models\Setting::get('card_text_color', '#ffffff') }}; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 24px 18px; box-shadow: 0 14px 28px rgba(18, 38, 63, 0.18);">
                                                 <div id="card-logo-wrap" style="width: 110px; height: 110px; display: flex; align-items: center; justify-content: center;">
                                                     <img id="card-logo-preview"
                                                          src="{{ \App\Models\Setting::get('card_logo_source', 'login') === 'admin'
@@ -501,7 +565,10 @@
             { color: 'theme_primary', text: 'theme_primary_text' },
             { color: 'theme_secondary', text: 'theme_secondary_text' },
             { color: 'theme_accent', text: 'theme_accent_text' },
-            { color: 'card_bg_color', text: 'card_bg_color_text' }
+            { color: 'card_bg_color', text: 'card_bg_color_text' },
+            { color: 'card_text_color', text: 'card_text_color_text' },
+            { color: 'sidebar_dashboard_text_color', text: 'sidebar_dashboard_text_color_text' },
+            { color: 'login_heading_color', text: 'login_heading_color_text' }
         ];
 
         const isHex = (val) => /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(val);
@@ -518,7 +585,7 @@
             textInput.addEventListener('input', () => {
                 if (isHex(textInput.value)) {
                     colorInput.value = textInput.value;
-                    if (pair.color === 'card_bg_color') {
+                    if (pair.color === 'card_bg_color' || pair.color === 'card_text_color') {
                         updateCardPreview();
                     }
                 }
@@ -527,6 +594,7 @@
 
         const updateCardPreview = () => {
             const bgInput = document.querySelector('input[name="card_bg_color"]');
+            const textColorInput = document.querySelector('input[name="card_text_color"]');
             const titleInput = document.querySelector('input[name="card_title"]');
             const logoChoice = document.querySelector('input[name="card_logo_source"]:checked');
             const preview = document.getElementById('card-preview');
@@ -536,6 +604,9 @@
 
             if (bgInput) {
                 preview.style.background = bgInput.value;
+            }
+            if (textColorInput) {
+                preview.style.color = textColorInput.value;
             }
             if (titleInput) {
                 titlePreview.textContent = titleInput.value || '{{ __('settings_card_default_title') }}';
@@ -549,9 +620,11 @@
         };
 
         const bgInput = document.querySelector('input[name="card_bg_color"]');
+        const textColorInput = document.querySelector('input[name="card_text_color"]');
         const titleInput = document.querySelector('input[name="card_title"]');
         const logoRadios = document.querySelectorAll('input[name="card_logo_source"]');
         if (bgInput) bgInput.addEventListener('input', updateCardPreview);
+        if (textColorInput) textColorInput.addEventListener('input', updateCardPreview);
         if (titleInput) titleInput.addEventListener('input', updateCardPreview);
         logoRadios.forEach((radio) => radio.addEventListener('change', updateCardPreview));
         updateCardPreview();

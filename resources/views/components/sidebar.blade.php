@@ -1,6 +1,7 @@
 @php
     $themePrimary = \App\Models\Setting::get('theme_primary', '#7367f0');
     $themeSecondary = \App\Models\Setting::get('theme_secondary', '#00cfe8');
+    $dashboardTextColor = \App\Models\Setting::get('sidebar_dashboard_text_color', '#ffffff');
 @endphp
 <!-- Page Sidebar Start -->
 <div class="sidebar-wrapper" data-layout="stroke-svg"
@@ -33,10 +34,10 @@
 
                         <a class="sidebar-link link-nav"
                             href="{{ route('home') }}"
-                            style="background: linear-gradient(90deg, {{ $themePrimary }} 0%, {{ $themeSecondary }} 100%); color: #fff; border-radius: 14px; padding: 12px 14px; box-shadow: 0 8px 18px rgba(0,0,0,0.15);">
+                            style="background: linear-gradient(90deg, {{ $themePrimary }} 0%, {{ $themeSecondary }} 100%); color: {{ $dashboardTextColor }}; border-radius: 14px; padding: 12px 14px; box-shadow: 0 8px 18px rgba(0,0,0,0.15);">
                             <i class="fa fa-tachometer me-2"
-                                style="font-size: 1.1rem; color: #fff;"></i>
-                            <span>{{ __('Dashboard') }}</span>
+                                style="font-size: 1.1rem; color: {{ $dashboardTextColor }};"></i>
+                            <span style="color: {{ $dashboardTextColor }};">{{ __('Dashboard') }}</span>
                         </a>
 
                     </li>
@@ -52,10 +53,10 @@
 
                         <a class="sidebar-link link-nav"
                             href="{{ route('home') }}"
-                            style="background: linear-gradient(90deg, {{ $themePrimary }} 0%, {{ $themeSecondary }} 100%); color: #fff; border-radius: 14px; padding: 12px 14px; box-shadow: 0 8px 18px rgba(0,0,0,0.15);">
+                            style="background: linear-gradient(90deg, {{ $themePrimary }} 0%, {{ $themeSecondary }} 100%); color: {{ $dashboardTextColor }}; border-radius: 14px; padding: 12px 14px; box-shadow: 0 8px 18px rgba(0,0,0,0.15);">
                             <i class="fa fa-tachometer me-2"
-                                style="font-size: 1.1rem; color: #fff;"></i>
-                            <span>{{ __('Dashboard') }}</span>
+                                style="font-size: 1.1rem; color: {{ $dashboardTextColor }};"></i>
+                            <span style="color: {{ $dashboardTextColor }};">{{ __('Dashboard') }}</span>
                         </a>
 
                     </li>

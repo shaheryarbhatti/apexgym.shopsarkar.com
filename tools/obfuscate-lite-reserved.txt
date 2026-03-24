@@ -1,0 +1,28 @@
+# Add variable names to keep readable during aggressive obfuscation.
+# One per line. You can write with or without the "$" prefix.
+
+user
+request
+member
+invoice
+trainer
+visit
+payment
+settings
+query
+builder
+model
+guard
+session
+response
+app
+config
+route
+router
+event
+listener
+job
+mail
+data
+input
+totalMembers

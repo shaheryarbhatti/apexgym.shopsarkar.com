@@ -343,6 +343,15 @@
     "settings_tab_price_visit": "Price Per Visit",
     "settings_tab_freeze_price": "Freeze Price",
     "settings_tab_trainer_price": "Trainer Price",
-    "settings_tab_card_design": "Card Design"
+    "settings_tab_card_design": "Card Design",
+    "settings_tab_meta_tags": "Meta Tags",
+    "settings_sidebar_dashboard_text_color": "Sidebar Dashboard Text Color",
+    "settings_card_text_color": "Card Text Color",
+    "settings_meta_tags": "Meta Tags",
+    "settings_meta_tags_desc": "Manage SEO meta tags for all pages.",
+    "settings_meta_author": "Meta Author",
+    "settings_meta_keywords": "Meta Keywords",
+    "settings_meta_description": "Meta Description",
+    "settings_login_heading_color": "Login Heading Color"
 
 }

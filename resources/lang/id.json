@@ -337,6 +337,15 @@
     "settings_tab_price_visit": "Harga Per Kunjungan",
     "settings_tab_freeze_price": "Harga Pembekuan",
     "settings_tab_trainer_price": "Harga Pelatih",
-    "settings_tab_card_design": "Desain Kartu"
+    "settings_tab_card_design": "Desain Kartu",
+    "settings_tab_meta_tags": "Meta Tag",
+    "settings_sidebar_dashboard_text_color": "Warna Teks Dashboard Sidebar",
+    "settings_card_text_color": "Warna Teks Kartu",
+    "settings_meta_tags": "Meta Tag",
+    "settings_meta_tags_desc": "Kelola meta tag SEO untuk semua halaman.",
+    "settings_meta_author": "Penulis Meta",
+    "settings_meta_keywords": "Kata Kunci Meta",
+    "settings_meta_description": "Deskripsi Meta",
+    "settings_login_heading_color": "Warna Judul Login"
 
 }

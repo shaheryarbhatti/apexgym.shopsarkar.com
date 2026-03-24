@@ -5,17 +5,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Sky Fitness Gym – premium gym portal. Book sessions, track attendance, manage membership & payments online. Transform your fitness journey with SkyFitnessGym.com">
-    <meta name="keywords"
-        content="gym management system, fitness portal, gym membership online, online gym booking, fitness tracking app, gym attendance system, personal training portal, gym payment online, sky fitness gym, skyfitnessgym, fitness progress tracker, workout planner online">
-    <meta name="author" content="skyfitnessgym.com">
     @php
         $faviconPath = \App\Models\Setting::get('favicon', 'assets/images/favicon.png');
+        $metaKeywords = \App\Models\Setting::get('meta_keywords', 'gym, fitness, membership, attendance, payments');
+        $metaDescription = \App\Models\Setting::get('meta_description', 'Gym management system for memberships, attendance, and billing.');
+        $metaAuthor = \App\Models\Setting::get('meta_author', 'Sky Fitness Gym');
     @endphp
+    <meta name="keywords" content="{{ $metaKeywords }}">
+    <meta name="description" content="{{ $metaDescription }}">
+    <meta name="author" content="{{ $metaAuthor }}">
     <link rel="icon" href="{{ asset('public/' . $faviconPath) }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('public/' . $faviconPath) }}" type="image/x-icon">
-    <title>Sky Fitness Gym – Premium Gym Portal</title>
+    <title>Apex Gym – Premium Gym Portal</title>
 
     <!-- Your existing styles + assets -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,6 +45,7 @@
         $themePrimary = \App\Models\Setting::get('theme_primary', '#0f9b8e');
         $themeSecondary = \App\Models\Setting::get('theme_secondary', '#3a7bd5');
         $themeAccent = \App\Models\Setting::get('theme_accent', '#00d2ff');
+        $loginHeadingColor = \App\Models\Setting::get('login_heading_color', '#ffffff');
         $barcodeEnabled = \App\Models\Setting::get('login_barcode_enabled', '1') === '1';
     @endphp
     <style>
@@ -152,7 +154,7 @@
             background: linear-gradient(90deg, var(--accent-2), var(--accent-1), var(--accent-3));
             -webkit-background-clip: text;
             background-clip: text;
-            color: transparent;
+            color: {{ $loginHeadingColor }};
         }
 
         .login-hero p {

@@ -7,11 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Sky Fitness Gym – premium gym portal. Book sessions, track attendance, manage membership & payments online. Transform your fitness journey with SkyFitnessGym.com">
-    <meta name="keywords"
-        content="gym management system, fitness portal, gym membership online, online gym booking, fitness tracking app, gym attendance system, personal training portal, gym payment online, sky fitness gym, skyfitnessgym, fitness progress tracker, workout planner online">
-    <meta name="author" content="skyfitnessgym.com">
+
     <title>{{ __('manage_trainers') }}</title>
 
     @extends('layouts.app')

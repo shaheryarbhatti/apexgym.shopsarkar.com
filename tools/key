@@ -1,0 +1,6 @@
+powershell -ExecutionPolicy Bypass -File .\tools\obfuscate-lite.ps1
+powershell -ExecutionPolicy Bypass -File .\tools\obfuscate-lite.ps1 -Medium
+powershell -ExecutionPolicy Bypass -File .\tools\obfuscate-lite.ps1 -Aggressive
+powershell -ExecutionPolicy Bypass -File .\tools\obfuscate-lite.ps1 -Views
+powershell -ExecutionPolicy Bypass -File .\tools\obfuscate-lite.ps1 -Medium -Views
+powershell -ExecutionPolicy Bypass -File .\tools\obfuscate-lite.ps1 -Aggressive -Views

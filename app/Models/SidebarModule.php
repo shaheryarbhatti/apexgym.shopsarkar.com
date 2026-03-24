@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class SidebarModule extends Model { protected $fillable = [ 'title', 'icon', 'permission', 'order', ]; public function options() { return $this->hasMany(SidebarOption::class, base64_decode('c2lkZWJhcl9tb2R1bGVfaWQ='))->orderBy(base64_decode('b3JkZXI=')); } } 

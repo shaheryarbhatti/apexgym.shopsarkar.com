@@ -1,0 +1,2 @@
+<?php
+ namespace App\Http\Controllers\Auth; use App\Http\Controllers\Controller; use Illuminate\Foundation\Auth\VerifiesEmails; class VerificationController extends Controller { use VerifiesEmails; protected $redirectTo = '/home'; public function __construct() { $this->middleware(base64_decode('YXV0aA==')); $this->middleware(base64_decode('c2lnbmVk'))->only(base64_decode('dmVyaWZ5')); $this->middleware(base64_decode('dGhyb3R0bGU6Niwx'))->only(base64_decode('dmVyaWZ5'), base64_decode('cmVzZW5k')); } } 

@@ -1,0 +1,2 @@
+<?php
+namespace App\Http\Middleware; use Closure; use Illuminate\Http\Request; use Symfony\Component\HttpFoundation\Response; class SetLocale { public function handle(Request $request, Closure $next): Response { if (session()->has(base64_decode('bG9jYWxl'))) { $v1 = session()->get(base64_decode('bG9jYWxl')); app()->setLocale($v1); \Illuminate\Support\Facades\Config::set(base64_decode('YXBwLmxvY2FsZQ=='), $v1); } return $next($request); } } 

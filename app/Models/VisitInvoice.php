@@ -1,0 +1,2 @@
+<?php
+ namespace App\Models; use Illuminate\Database\Eloquent\Model; class VisitInvoice extends Model { protected $fillable = [ 'invoice_no', 'member_id', 'visit_title', 'fee', 'discount_percent', 'discount_amount', 'total', 'payment_method', 'visit_date', 'invoice_header', 'invoice_footer', 'status', ]; protected $casts = [ 'fee' => 'decimal:2', 'discount_percent' => 'decimal:2', 'discount_amount' => 'decimal:2', 'total' => 'decimal:2', 'visit_date' => 'date', ]; public function member() { return $this->belongsTo(Member::class); } } 

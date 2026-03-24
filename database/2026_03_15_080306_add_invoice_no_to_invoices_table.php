@@ -1,0 +1,2 @@
+<?php
+ use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema; return new class extends Migration { public function up(): void { Schema::table(base64_decode('aW52b2ljZXM='), function (Blueprint $v1) { $v1->string(base64_decode('aW52b2ljZV9ubw=='))->nullable()->after(base64_decode('aWQ=')); }); } public function down(): void { Schema::table(base64_decode('aW52b2ljZXM='), function (Blueprint $v1) { }); } }; 

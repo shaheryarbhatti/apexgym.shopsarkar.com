@@ -1,0 +1,2 @@
+<?php
+ use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema; return new class extends Migration { public function up(): void { Schema::create(base64_decode('cGF5bWVudF9tZXRob2Rz'), function (Blueprint $v1) { $v1->id(); $v1->string(base64_decode('bmFtZQ=='))->unique(); $v1->boolean(base64_decode('aXNfYWN0aXZl'))->default(true); $v1->timestamps(); }); } public function down(): void { Schema::dropIfExists(base64_decode('cGF5bWVudF9tZXRob2Rz')); } }; 

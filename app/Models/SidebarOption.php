@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class SidebarOption extends Model { protected $fillable = [ 'sidebar_module_id', 'title', 'route', 'permission', 'order', ]; public function module() { return $this->belongsTo(SidebarModule::class); } } 

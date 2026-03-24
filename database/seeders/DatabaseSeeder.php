@@ -1,0 +1,2 @@
+<?php
+ namespace Database\Seeders; use App\Models\User; use Illuminate\Database\Console\Seeds\WithoutModelEvents; use Illuminate\Database\Seeder; class DatabaseSeeder extends Seeder { use WithoutModelEvents; public function run(): void { User::factory()->create([ base64_decode('bmFtZQ==') => base64_decode('VGVzdCBVc2Vy'), base64_decode('ZW1haWw=') => base64_decode('dGVzdEBleGFtcGxlLmNvbQ=='), ]); $this->call([ SidebarSeeder::class, TrainerSeeder::class, ]); } } 

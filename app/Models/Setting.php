@@ -1,0 +1,2 @@
+<?php
+ namespace App\Models; use Illuminate\Database\Eloquent\Model; class Setting extends Model { protected $fillable = ['key', 'value']; public static function get($key, $default = null) { $v1 = self::where(base64_decode('a2V5'), $key)->first(); return $v1 ? $v1->value : $default; } } 

@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class Attendance extends Model { protected $fillable = [ 'user_id', 'checkin_time', 'checkout_time', 'attendance_date', ]; protected $casts = [ 'checkin_time' => 'datetime', 'checkout_time' => 'datetime', 'attendance_date' => 'date', ]; public function user() { return $this->belongsTo(User::class, base64_decode('dXNlcl9pZA=='), base64_decode('aWQ=')); } } 

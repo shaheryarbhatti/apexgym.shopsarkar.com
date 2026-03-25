@@ -346,6 +346,21 @@
     "settings_meta_author": "Penulis Meta",
     "settings_meta_keywords": "Kata Kunci Meta",
     "settings_meta_description": "Deskripsi Meta",
-    "settings_login_heading_color": "Warna Judul Login"
+    "settings_login_heading_color": "Warna Judul Login",
+    "settings_tab_license": "Lisensi",
+    "settings_license": "Pengaturan Lisensi",
+    "settings_license_desc": "Hubungkan sistem ini ke server lisensi Anda.",
+    "license_client_name": "Nama Klien",
+    "license_server_url": "URL Server Lisensi",
+    "license_key": "Kunci Lisensi",
+    "license_project_key": "Kunci Proyek",
+    "license_project_secret": "Rahasia Proyek",
+    "license_required": "Lisensi Diperlukan",
+    "license_missing": "Pengaturan lisensi belum lengkap. Silakan perbarui detail lisensi.",
+    "license_invalid": "Verifikasi lisensi gagal. Silakan cek detail lisensi.",
+    "license_server_unreachable": "Server lisensi tidak dapat dijangkau. Coba lagi nanti.",
+    "license_fix_hint": "Perbarui detail lisensi di Pengaturan untuk mendapatkan akses kembali.",
+    "update_license_settings": "Perbarui Pengaturan Lisensi",
+    "back_to_dashboard": "Kembali ke Dashboard"
 
 }

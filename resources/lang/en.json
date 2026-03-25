@@ -352,6 +352,21 @@
     "settings_meta_author": "Meta Author",
     "settings_meta_keywords": "Meta Keywords",
     "settings_meta_description": "Meta Description",
-    "settings_login_heading_color": "Login Heading Color"
+    "settings_login_heading_color": "Login Heading Color",
+    "settings_tab_license": "License",
+    "settings_license": "License Settings",
+    "settings_license_desc": "Connect this system to your license server.",
+    "license_client_name": "Client Name",
+    "license_server_url": "License Server URL",
+    "license_key": "License Key",
+    "license_project_key": "Project Key",
+    "license_project_secret": "Project Secret",
+    "license_required": "License Required",
+    "license_missing": "License settings are missing. Please update the license details.",
+    "license_invalid": "License verification failed. Please check your license details.",
+    "license_server_unreachable": "License server is unreachable. Please try again later.",
+    "license_fix_hint": "Update the license details in Settings to regain access.",
+    "update_license_settings": "Update License Settings",
+    "back_to_dashboard": "Back to Dashboard"
 
 }

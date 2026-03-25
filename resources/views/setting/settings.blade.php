@@ -121,6 +121,18 @@
                     <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data" id="settingsForm">
                         @csrf
                         <div class="card-body">
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+                            @php $guestMode = env('GUEST_MODE') === 'on'; @endphp
+                            @if ($guestMode)
+                                <div class="alert alert-warning">
+                                    {{ __('settings_guest_mode_block') }}
+                                </div>
+                            @endif
+                            <fieldset {{ $guestMode ? 'disabled' : '' }}>
                             <ul class="nav nav-pills gap-2 flex-wrap settings-tabs">
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-branding">{{ __('settings_tab_branding') }}</a>
@@ -161,12 +173,12 @@
                                     <label class="form-label fw-bold">{{ __('footer_text') }}</label>
                                     <input type="text" name="footer_text" class="form-control"
                                            value="{{ \App\Models\Setting::get('footer_text') }}"
-                                           placeholder="e.g. Copyright 2026 © Sky Fitness Gym">
+                                           placeholder="e.g. Copyright 2026 © Sky Fitness Gym" {{ $guestMode ? 'disabled' : '' }}>
                                 </div>
 
                                 <div class="col-xl-4 col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('login_logo') }}</label>
-                                    <input type="file" name="login_logo" class="form-control mb-2">
+                                    <input type="file" name="login_logo" class="form-control mb-2" {{ $guestMode ? 'disabled' : '' }}>
                                     <div class="preview-box border p-2 text-center bg-light">
                                         <img src="{{ asset('public/' .\App\Models\Setting::get('login_logo', 'public/assets/images/logo/logo.png')) }}"
                                              style="max-height: 80px; width: auto;">
@@ -175,7 +187,7 @@
 
                                 <div class="col-xl-4 col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('admin_logo') }}</label>
-                                    <input type="file" name="admin_logo" class="form-control mb-2">
+                                    <input type="file" name="admin_logo" class="form-control mb-2" {{ $guestMode ? 'disabled' : '' }}>
                                     <div class="preview-box border p-2 text-center bg-light">
                                         <img src="{{ asset('public/' .\App\Models\Setting::get('admin_logo', 'public/assets/images/logo/logo_dark.png')) }}"
                                              style="max-height: 80px; width: auto;">
@@ -184,7 +196,7 @@
 
                                 <div class="col-xl-4 col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('login_background_image') }}</label>
-                                    <input type="file" name="login_bg_image" class="form-control mb-2">
+                                    <input type="file" name="login_bg_image" class="form-control mb-2" {{ $guestMode ? 'disabled' : '' }}>
                                     <div class="preview-box border p-2 text-center bg-light">
                                         <img src="{{ asset('public/' .\App\Models\Setting::get('login_bg_image', 'public/assets/images/login/bg.jpg')) }}"
                                              style="max-height: 80px; width: 100%; object-fit: cover;">
@@ -193,7 +205,7 @@
 
                                 <div class="col-xl-4 col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_favicon') }}</label>
-                                    <input type="file" name="favicon" class="form-control mb-2" accept="image/png,image/x-icon,image/vnd.microsoft.icon">
+                                    <input type="file" name="favicon" class="form-control mb-2" accept="image/png,image/x-icon,image/vnd.microsoft.icon" {{ $guestMode ? 'disabled' : '' }}>
                                     <div class="preview-box border p-2 text-center bg-light">
                                         <img src="{{ asset('public/' .\App\Models\Setting::get('favicon', 'assets/images/favicon.png')) }}"
                                              style="max-height: 48px; width: auto;">
@@ -586,6 +598,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </fieldset>
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-primary" type="submit">{{ __('save_settings') }}</button>

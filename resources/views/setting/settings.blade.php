@@ -391,7 +391,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_smtp_password') }}</label>
                                     <input type="password" name="smtp_password" class="form-control"
-                                           value="{{ \App\Models\Setting::get('smtp_password') }}" placeholder="••••••••">
+                                           value="{{ $guestMode ? '' : \App\Models\Setting::get('smtp_password') }}" placeholder="••••••••">
                                 </div>
 
                                 <div class="col-md-6 mb-3">

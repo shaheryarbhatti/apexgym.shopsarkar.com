@@ -11,51 +11,49 @@ if (-not (Test-Path -Path $Source)) {
     exit 1
 }
 
-if (-not (Test-Path -Path $Target)) {
-    Write-Error "Target path not found: $Target"
-    exit 1
-}
-
-$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-$backupPath = "${Target}_backup_$timestamp"
-Write-Host "Creating backup of target:" $Target
-Copy-Item -Path $Target -Destination $backupPath -Recurse -Force
-Write-Host "Backup created at:" $backupPath
-Write-Host ""
-
-# Keep only the 2 most recent backups
-$backupPrefix = (Split-Path -Path $Target -Leaf) + "_backup_"
-$backupDir = Split-Path -Path $Target -Parent
-$backups = Get-ChildItem -Path $backupDir -Directory |
-    Where-Object { $_.Name -like "$backupPrefix*" } |
-    Sort-Object Name -Descending
-
-if ($backups.Count -gt 2) {
-    $toDelete = $backups | Select-Object -Skip 2
-    foreach ($item in $toDelete) {
-        Write-Host "Removing old backup:" $item.FullName
-        Remove-Item -Path $item.FullName -Recurse -Force
+$targetsFile = "C:\\xampp\\htdocs\\gym\\tools\\obfuscate-lite-targets.txt"
+$targets = @()
+if (Test-Path -Path $targetsFile) {
+    $targets = Get-Content -Path $targetsFile | ForEach-Object { $_.Trim() } | Where-Object {
+        $_ -ne "" -and -not $_.StartsWith("#")
+    } | ForEach-Object {
+        if ($_ -match "^[A-Za-z]:\\\\") {
+            $_
+        } else {
+            "C:\\xampp\\htdocs\\$($_)"
+        }
     }
 }
 
-Write-Host "Lite obfuscation from:" $Source
-Write-Host "Output target:" $Target
-Write-Host ""
-
-$args = @()
-if ($Aggressive) {
-    $args += '--aggressive'
-} elseif ($Medium) {
-    $args += '--medium'
-}
-if ($Views) {
-    $args += '--views'
+if ($targets.Count -eq 0) {
+    $targets = @($Target)
 }
 
-& php "C:\\xampp\\htdocs\\gym\\tools\\obfuscate-lite.php" $Source $Target @args
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "obfuscate-lite failed with exit code $LASTEXITCODE"
-    exit $LASTEXITCODE
+foreach ($targetPath in $targets) {
+    if (-not (Test-Path -Path $targetPath)) {
+        Write-Host "Target path not found. Creating:" $targetPath
+        New-Item -ItemType Directory -Force -Path $targetPath | Out-Null
+    }
+
+    Write-Host "Lite obfuscation from:" $Source
+    Write-Host "Output target:" $targetPath
+    Write-Host ""
+
+    $args = @()
+    if ($Aggressive) {
+        $args += '--aggressive'
+    } elseif ($Medium) {
+        $args += '--medium'
+    }
+    if ($Views) {
+        $args += '--views'
+    }
+
+    & php "C:\\xampp\\htdocs\\gym\\tools\\obfuscate-lite.php" $Source $targetPath @args
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "obfuscate-lite failed with exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
 }
 
 Write-Host "Lite obfuscation complete."

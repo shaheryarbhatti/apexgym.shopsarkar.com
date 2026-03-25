@@ -249,7 +249,7 @@
                     <div class="hero-content">
                         <div class="login-badge">
                             <i class="fa fa-heartbeat"></i>
-                            <span>Sky Fitness Gym</span>
+                            <span>{{ \App\Models\Setting::get('login_badge_text', 'Sky Fitness Gym') }}</span>
                         </div>
                         <h1>{{ \App\Models\Setting::get('login_heading', 'Train Smarter, Track Faster') }}</h1>
                         <p>{{ \App\Models\Setting::get('login_description', 'Streamline daily operations with member profiles, smart attendance, and simple billing in one place.') }}</p>

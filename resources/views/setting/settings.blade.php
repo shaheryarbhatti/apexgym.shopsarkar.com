@@ -268,6 +268,12 @@
                                            value="{{ \App\Models\Setting::get('login_heading', 'Train Smarter, Track Faster') }}">
                                 </div>
 
+                                <div class="col-sm-12 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_login_badge_text') }}</label>
+                                    <input type="text" name="login_badge_text" class="form-control"
+                                           value="{{ \App\Models\Setting::get('login_badge_text', 'Sky Fitness Gym') }}">
+                                </div>
+
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_login_heading_color') }}</label>
                                     <div class="input-group">

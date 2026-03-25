@@ -347,6 +347,7 @@
     "settings_meta_keywords": "Kata Kunci Meta",
     "settings_meta_description": "Deskripsi Meta",
     "settings_login_heading_color": "Warna Judul Login",
+    "settings_login_badge_text": "Teks Lencana Login",
     "settings_tab_license": "Lisensi",
     "settings_license": "Pengaturan Lisensi",
     "settings_license_desc": "Hubungkan sistem ini ke server lisensi Anda.",

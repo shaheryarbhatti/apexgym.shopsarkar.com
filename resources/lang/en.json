@@ -353,6 +353,7 @@
     "settings_meta_keywords": "Meta Keywords",
     "settings_meta_description": "Meta Description",
     "settings_login_heading_color": "Login Heading Color",
+    "settings_login_badge_text": "Login Badge Text",
     "settings_tab_license": "License",
     "settings_license": "License Settings",
     "settings_license_desc": "Connect this system to your license server.",

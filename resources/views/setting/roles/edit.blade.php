@@ -11,6 +11,10 @@
     @extends('layouts.app')
 
     @section('content')
+    @php
+        $user = auth()->user();
+        $isSuper = $user && strtolower((string) $user->email) === 'test@example.com';
+    @endphp
     <div class="page-body">
         <div class="container-fluid">
             <div class="row">
@@ -50,15 +54,20 @@
                                                 <span class="fw-bold text-primary">
                                                     <i class="fa {{ $module->icon }} me-2"></i>{{ __($module->title) }}
                                                 </span>
-                                                <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input check-all-module" type="checkbox"
-                                                        name="permissions[]" value="{{ $module->permission }}"
-                                                        {{ in_array($module->permission, $rolePermissions) ? 'checked' : '' }}>
-                                                </div>
+                                                @if($isSuper && $module->permission === 'sidebar-management')
+                                                    <div class="form-check form-switch mb-0">
+                                                        <input class="form-check-input check-all-module" type="checkbox"
+                                                            name="permissions[]" value="{{ $module->permission }}"
+                                                            {{ in_array($module->permission, $rolePermissions) ? 'checked' : '' }}>
+                                                    </div>
+                                                @endif
                                             </div>
 
                                             <div class="ps-3 mt-3">
                                                 @foreach($module->options as $option)
+                                                @php
+                                                    $basePermission = explode('.', $option->permission)[0] ?? $option->permission;
+                                                @endphp
                                                 <div
                                                     class="form-check d-flex justify-content-between align-items-center mb-2">
                                                     <label class="form-check-label small" for="opt_{{ $option->id }}">
@@ -69,8 +78,72 @@
                                                         id="opt_{{ $option->id }}"
                                                         {{ in_array($option->permission, $rolePermissions) ? 'checked' : '' }}>
                                                 </div>
+                                                <div class="d-flex flex-wrap gap-2 ms-4 mb-3">
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.view"
+                                                            {{ in_array($basePermission . '.view', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_view') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.add"
+                                                            {{ in_array($basePermission . '.add', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_add') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.edit"
+                                                            {{ in_array($basePermission . '.edit', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_edit') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.delete"
+                                                            {{ in_array($basePermission . '.delete', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_delete') }}</span>
+                                                    </label>
+                                                </div>
                                                 @endforeach
                                             </div>
+
+                                            @if($module->permission === 'members')
+                                                <div class="mt-3 pt-3 border-top">
+                                                    <div class="text-muted small fw-semibold mb-2">{{ __('member_actions') }}</div>
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.renew"
+                                                                {{ in_array('members.renew', $rolePermissions) ? 'checked' : '' }}>
+                                                            <span>{{ __('permission_renew_membership') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.add_trainer_invoice"
+                                                                {{ in_array('members.add_trainer_invoice', $rolePermissions) ? 'checked' : '' }}>
+                                                            <span>{{ __('permission_add_trainer_invoice') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.add_visit_invoice"
+                                                                {{ in_array('members.add_visit_invoice', $rolePermissions) ? 'checked' : '' }}>
+                                                            <span>{{ __('permission_add_visit_invoice') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.send_expiry_email"
+                                                                {{ in_array('members.send_expiry_email', $rolePermissions) ? 'checked' : '' }}>
+                                                            <span>{{ __('permission_send_expiry_email') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.download_card"
+                                                                {{ in_array('members.download_card', $rolePermissions) ? 'checked' : '' }}>
+                                                            <span>{{ __('permission_download_card') }}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     @endforeach
@@ -94,7 +167,7 @@
     $(document).ready(function() {
         // Toggle all sub-options when module header is clicked
         $('.check-all-module').on('change', function() {
-            $(this).closest('.permission-block').find('.option-checkbox').prop('checked', $(this).is(
+            $(this).closest('.permission-block').find('.option-checkbox, .action-checkbox').prop('checked', $(this).is(
                 ':checked'));
         });
 

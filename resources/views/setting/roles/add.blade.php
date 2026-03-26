@@ -11,6 +11,10 @@
     @extends('layouts.app')
 
     @section('content')
+    @php
+        $user = auth()->user();
+
+    @endphp
     <div class="page-body">
         <div class="container-fluid">
             <div class="row">
@@ -50,14 +54,20 @@
                                                 <span class="fw-bold text-primary">
                                                     <i class="fa {{ $module->icon }} me-2"></i>{{ __($module->title) }}
                                                 </span>
-                                                <div class="form-check form-switch mb-0">
-                                                    <input class="form-check-input check-all-module" type="checkbox"
-                                                        name="permissions[]" value="{{ $module->permission }}">
-                                                </div>
+
+                                                    <div class="form-check form-switch mb-0">
+                                                        <input class="form-check-input check-all-module" type="checkbox"
+                                                            name="permissions[]" value="{{ $module->permission }}">
+                                                    </div>
                                             </div>
 
                                             <div class="ps-3 mt-3">
                                                 @foreach($module->options as $option)
+                                                @php
+                                                    $basePermission = explode('.', $option->permission)[0] ?? $option->permission;
+                                                @endphp
+                                                @if($user->email == 'test@example.com' && $option->permission == 'sidebar-management')
+
                                                 <div
                                                     class="form-check d-flex justify-content-between align-items-center mb-2">
                                                     <label class="form-check-label small" for="opt_{{ $option->id }}">
@@ -67,12 +77,103 @@
                                                         name="permissions[]" value="{{ $option->permission }}"
                                                         id="opt_{{ $option->id }}">
                                                 </div>
+                                                <div class="d-flex flex-wrap gap-2 ms-4 mb-3">
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.view">
+                                                        <span>{{ __('permission_view') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.add">
+                                                        <span>{{ __('permission_add') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.edit">
+                                                        <span>{{ __('permission_edit') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.delete">
+                                                        <span>{{ __('permission_delete') }}</span>
+                                                    </label>
+                                                </div>
+
+                                                @else
+                                                @if($option->permission != 'sidebar-management')
+                                                <div
+                                                    class="form-check d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="form-check-label small" for="opt_{{ $option->id }}">
+                                                        {{ __($option->title) }}
+                                                    </label>
+                                                    <input class="form-check-input option-checkbox" type="checkbox"
+                                                        name="permissions[]" value="{{ $option->permission }}"
+                                                        id="opt_{{ $option->id }}">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-2 ms-4 mb-3">
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.view">
+                                                        <span>{{ __('permission_view') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.add">
+                                                        <span>{{ __('permission_add') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.edit">
+                                                        <span>{{ __('permission_edit') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.delete">
+                                                        <span>{{ __('permission_delete') }}</span>
+                                                    </label>
+                                                </div>
+                                                @endif
+                                                @endif
                                                 @endforeach
 
                                                 @if($module->options->isEmpty())
                                                 <p class="text-muted small mb-0"><i>{{ __('no_sub_options') }}</i></p>
                                                 @endif
                                             </div>
+
+                                            @if($module->permission === 'members')
+                                                <div class="mt-3 pt-3 border-top">
+                                                    <div class="text-muted small fw-semibold mb-2">{{ __('member_actions') }}</div>
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.renew">
+                                                            <span>{{ __('permission_renew_membership') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.add_trainer_invoice">
+                                                            <span>{{ __('permission_add_trainer_invoice') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.add_visit_invoice">
+                                                            <span>{{ __('permission_add_visit_invoice') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.send_expiry_email">
+                                                            <span>{{ __('permission_send_expiry_email') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.download_card">
+                                                            <span>{{ __('permission_download_card') }}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     @endforeach
@@ -96,7 +197,7 @@
     <script>
     $(document).ready(function() {
         $('.check-all-module').on('change', function() {
-            $(this).closest('.permission-block').find('.option-checkbox').prop('checked', $(this).is(
+            $(this).closest('.permission-block').find('.option-checkbox, .action-checkbox').prop('checked', $(this).is(
                 ':checked'));
         });
 

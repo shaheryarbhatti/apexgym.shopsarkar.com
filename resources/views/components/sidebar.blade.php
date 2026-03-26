@@ -64,17 +64,11 @@
 
                     @php
                     $user = auth()->user();
+                    $isSuper = $user && $user->hasRole('Super Admin');
                     if ($user) {
-                    $modules = \App\Models\SidebarModule::with('options')
-                    ->where(function($q) use ($user) {
-                    $q->where('permission', null)
-                    ->orWhere(function($qq) use ($user) {
-                    $qq->whereNotNull('permission')
-                    ->whereIn('permission', $user->getAllPermissions()->pluck('name'));
-                    });
-                    })
-                    ->orderBy('order')
-                    ->get();
+                        $modules = \App\Models\SidebarModule::with('options')
+                            ->orderBy('order')
+                            ->get();
                     } else {
                     $modules = collect();
                     }
@@ -82,8 +76,35 @@
                     @endphp
 
                     @foreach($modules as $module)
+                    @php
+                        $moduleVisible = $isSuper || ! $module->permission || $user->hasPermissionTo($module->permission);
+                        $visibleOptions = collect();
+                        foreach ($module->options as $option) {
+                            $basePermission = explode('.', $option->permission)[0] ?? $option->permission;
+                            $legacyBase = 'manage-' . \Illuminate\Support\Str::singular($basePermission);
+                            $actionPermissions = [
+                                $basePermission . '.view',
+                                $basePermission . '.add',
+                                $basePermission . '.edit',
+                                $basePermission . '.delete',
+                                $legacyBase . '.view',
+                                $legacyBase . '.add',
+                                $legacyBase . '.edit',
+                                $legacyBase . '.delete',
+                            ];
+                            $hasOptionPermission = $isSuper || ! $option->permission || $user->hasPermissionTo($option->permission);
+                            $hasActionPermission = $isSuper || $user->canAny($actionPermissions);
+                            if ($hasOptionPermission || $hasActionPermission) {
+                                $visibleOptions->push($option);
+                            }
+                        }
+                        if ($visibleOptions->isNotEmpty()) {
+                            $moduleVisible = true;
+                        }
+                    @endphp
+                    @if($moduleVisible)
                     <li class="sidebar-list" style="margin-bottom: 6px;">
-                        @if($module->options->count() > 0)
+                        @if($visibleOptions->count() > 0)
                         <a class="sidebar-link sidebar-title"
                             href="javascript:void(0)"
                             style="border-radius: 12px; padding: 10px 12px; transition: all .2s ease; border: 1px solid rgba(0,0,0,0.04); background: #fff;">
@@ -92,18 +113,13 @@
                             <span style="font-weight: 600; color: #2a2f45;">{{ __($module->title) }}</span>
                         </a>
                         <ul class="sidebar-submenu" style="margin-top: 6px; margin-left: 6px;">
-                            @foreach($module->options as $option)
-                            @php
-                            $hasPermission = !$option->permission || $user->hasPermissionTo($option->permission);
-                            @endphp
-                            @if($hasPermission)
+                            @foreach($visibleOptions as $option)
                             <li>
                                 <a href="{{ route($option->route) }}"
                                     style="border-radius: 10px; padding: 9px 12px; margin: 4px 0; background: #f7f9ff; color: #3c4560; border: 1px solid rgba(0,0,0,0.06);">
                                     {{ __($option->title) }}
                                 </a>
                             </li>
-                            @endif
                             @endforeach
                         </ul>
                         @else
@@ -116,6 +132,7 @@
                         </a>
                         @endif
                     </li>
+                    @endif
                     @endforeach
                 </ul>
             </div>

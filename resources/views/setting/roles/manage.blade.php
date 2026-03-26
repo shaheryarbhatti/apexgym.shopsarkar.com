@@ -12,6 +12,11 @@
     @extends('layouts.app')
 
     @section('content')
+    @php
+        $user = auth()->user();
+        $legacyRoleBase = 'manage-' . \Illuminate\Support\Str::singular('roles');
+        $canRoleAdd = $user && $user->canAny(['roles.add', $legacyRoleBase . '.add']);
+    @endphp
     <div class="page-body">
         <div class="container-fluid">
             <div class="row g-4"></div>
@@ -21,9 +26,11 @@
                     <div class="card" style="margin-top: 20px;">
                         <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">{{ __('manage_roles') }}</h4>
-                            <a href="{{ route('roles.add') }}" class="btn btn-primary">
-                                <i class="fa fa-plus me-2"></i> {{ __('add_new_role') }}
-                            </a>
+                            @if($canRoleAdd)
+                                <a href="{{ route('roles.add') }}" class="btn btn-primary">
+                                    <i class="fa fa-plus me-2"></i> {{ __('add_new_role') }}
+                                </a>
+                            @endif
                         </div>
 
                         <div class="card-body">
@@ -195,4 +202,3 @@
     </script>
     @endpush
     @endsection
-

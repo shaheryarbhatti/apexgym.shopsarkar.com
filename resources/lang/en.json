@@ -373,6 +373,16 @@
     "confirm_delete_title": "Delete this item?",
     "confirm_delete_text": "This action cannot be undone.",
     "confirm_delete_confirm": "Yes, delete",
-    "confirm_delete_cancel": "Cancel"
+    "confirm_delete_cancel": "Cancel",
+    "permission_view": "View",
+    "permission_add": "Add",
+    "permission_edit": "Edit",
+    "permission_delete": "Delete",
+    "member_actions": "Member Actions",
+    "permission_renew_membership": "Renew Membership",
+    "permission_add_trainer_invoice": "Add Trainer Invoice",
+    "permission_add_visit_invoice": "Add Visit Invoice",
+    "permission_send_expiry_email": "Send Expiry Email",
+    "permission_download_card": "Download Card"
 
 }

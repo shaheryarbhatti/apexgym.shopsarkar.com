@@ -367,6 +367,16 @@
     "confirm_delete_title": "Hapus item ini?",
     "confirm_delete_text": "Tindakan ini tidak dapat dibatalkan.",
     "confirm_delete_confirm": "Ya, hapus",
-    "confirm_delete_cancel": "Batal"
+    "confirm_delete_cancel": "Batal",
+    "permission_view": "Lihat",
+    "permission_add": "Tambah",
+    "permission_edit": "Edit",
+    "permission_delete": "Hapus",
+    "member_actions": "Aksi Anggota",
+    "permission_renew_membership": "Perpanjang Keanggotaan",
+    "permission_add_trainer_invoice": "Tambah Invoice Pelatih",
+    "permission_add_visit_invoice": "Tambah Invoice Kunjungan",
+    "permission_send_expiry_email": "Kirim Email Kedaluwarsa",
+    "permission_download_card": "Unduh Kartu"
 
 }

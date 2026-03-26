@@ -20,6 +20,14 @@
             ? \App\Models\Setting::get('admin_logo', 'public/assets/images/logo/logo_dark.png')
             : \App\Models\Setting::get('login_logo', 'public/assets/images/logo/logo.png');
         $cardLogoUrl = asset('public/' . $cardLogoPath);
+        $user = auth()->user();
+        $legacyMemberBase = 'manage-' . \Illuminate\Support\Str::singular('members');
+        $canMemberAdd = $user && $user->canAny(['members.add', $legacyMemberBase . '.add']);
+        $canMemberRenew = $user && $user->canAny(['members.renew', $legacyMemberBase . '.renew']);
+        $canMemberTrainer = $user && $user->canAny(['members.add_trainer_invoice', $legacyMemberBase . '.add_trainer_invoice']);
+        $canMemberVisit = $user && $user->canAny(['members.add_visit_invoice', $legacyMemberBase . '.add_visit_invoice']);
+        $canMemberExpiry = $user && $user->canAny(['members.send_expiry_email', $legacyMemberBase . '.send_expiry_email']);
+        $canMemberDownload = $user && $user->canAny(['members.download_card', $legacyMemberBase . '.download_card']);
     @endphp
 
     <div class="page-body">
@@ -29,9 +37,11 @@
                 <div class="card" style="margin-top: 20px;">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">{{ __('manage_members') }}</h4>
-                        <a href="{{ route('members.add') }}" class="btn btn-primary">
-                            <i class="fa fa-plus me-2"></i> {{ __('add_new_member') }}
-                        </a>
+                        @if($canMemberAdd)
+                            <a href="{{ route('members.add') }}" class="btn btn-primary">
+                                <i class="fa fa-plus me-2"></i> {{ __('add_new_member') }}
+                            </a>
+                        @endif
                     </div>
 
                     <div class="card-body">
@@ -78,21 +88,31 @@
                     <!-- <button type="button" class="btn btn-primary">
                         <i class="fa fa-snowflake-o me-2"></i> {{ __('freeze_membership') }}
                     </button> -->
-                    <a href="#" class="btn btn-primary" id="renewMembershipBtn">
-                        <i class="fa fa-refresh me-2"></i> {{ __('renew_membership') }}
-                    </a>
-                    <a href="#" class="btn btn-primary" id="addTrainerBtn">
-                        <i class="fa fa-user-plus me-2"></i> {{ __('add_trainer') }}
-                    </a>
-                    <a href="#" class="btn btn-primary" id="visitInvoiceBtn">
-                        <i class="fa fa-file-text-o me-2"></i> {{ __('invoice_per_visit') }}
-                    </a>
-                    <button type="button" class="btn btn-primary" id="expiryEmailBtn">
-                        <i class="fa fa-envelope me-2"></i> {{ __('send_expiry_email') }}
-                    </button>
-                    <button type="button" class="btn btn-primary" id="downloadCardBtn">
-                        <i class="fa fa-download me-2"></i> {{ __('download_card') }}
-                    </button>
+                    @if($canMemberRenew)
+                        <a href="#" class="btn btn-primary" id="renewMembershipBtn">
+                            <i class="fa fa-refresh me-2"></i> {{ __('renew_membership') }}
+                        </a>
+                    @endif
+                    @if($canMemberTrainer)
+                        <a href="#" class="btn btn-primary" id="addTrainerBtn">
+                            <i class="fa fa-user-plus me-2"></i> {{ __('add_trainer') }}
+                        </a>
+                    @endif
+                    @if($canMemberVisit)
+                        <a href="#" class="btn btn-primary" id="visitInvoiceBtn">
+                            <i class="fa fa-file-text-o me-2"></i> {{ __('invoice_per_visit') }}
+                        </a>
+                    @endif
+                    @if($canMemberExpiry)
+                        <button type="button" class="btn btn-primary" id="expiryEmailBtn">
+                            <i class="fa fa-envelope me-2"></i> {{ __('send_expiry_email') }}
+                        </button>
+                    @endif
+                    @if($canMemberDownload)
+                        <button type="button" class="btn btn-primary" id="downloadCardBtn">
+                            <i class="fa fa-download me-2"></i> {{ __('download_card') }}
+                        </button>
+                    @endif
                 </div>
 
                 <div class="row g-4 align-items-start">
@@ -528,40 +548,43 @@
         }
     });
 
-    document.getElementById('downloadCardBtn').addEventListener('click', async () => {
-        const card = document.querySelector('.member-card-preview');
-        if (!card) return;
+    const downloadCardBtn = document.getElementById('downloadCardBtn');
+    if (downloadCardBtn) {
+        downloadCardBtn.addEventListener('click', async () => {
+            const card = document.querySelector('.member-card-preview');
+            if (!card) return;
 
-        const ensureHtml2Canvas = async () => {
-            if (window.html2canvas) return true;
-            const scriptId = 'html2canvas-script';
-            if (!document.getElementById(scriptId)) {
-                const script = document.createElement('script');
-                script.id = scriptId;
-                script.src = "{{ asset('public/assets/js/vendors/html2canvas.min.js') }}";
-                script.async = true;
-                document.head.appendChild(script);
-                await new Promise((resolve) => {
-                    script.onload = resolve;
-                    script.onerror = resolve;
-                });
-            }
-            return !!window.html2canvas;
-        };
+            const ensureHtml2Canvas = async () => {
+                if (window.html2canvas) return true;
+                const scriptId = 'html2canvas-script';
+                if (!document.getElementById(scriptId)) {
+                    const script = document.createElement('script');
+                    script.id = scriptId;
+                    script.src = "{{ asset('public/assets/js/vendors/html2canvas.min.js') }}";
+                    script.async = true;
+                    document.head.appendChild(script);
+                    await new Promise((resolve) => {
+                        script.onload = resolve;
+                        script.onerror = resolve;
+                    });
+                }
+                return !!window.html2canvas;
+            };
 
-        const ready = await ensureHtml2Canvas();
-        if (!ready) return;
+            const ready = await ensureHtml2Canvas();
+            if (!ready) return;
 
-        const canvas = await window.html2canvas(card, {
-            backgroundColor: null,
-            scale: 2
+            const canvas = await window.html2canvas(card, {
+                backgroundColor: null,
+                scale: 2
+            });
+            const link = document.createElement('a');
+            const code = downloadCardBtn.dataset.memberCode || 'member';
+            link.download = `${code}_card.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         });
-        const link = document.createElement('a');
-        const code = document.getElementById('downloadCardBtn').dataset.memberCode || 'member';
-        link.download = `${code}_card.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    });
+    }
 
     const expiryEmailBtn = document.getElementById('expiryEmailBtn');
     if (expiryEmailBtn) {

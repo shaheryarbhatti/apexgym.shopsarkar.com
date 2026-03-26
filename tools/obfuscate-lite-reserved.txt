@@ -49,3 +49,4 @@ email
 delete
 members
 validated
+currentUser

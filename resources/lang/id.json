@@ -363,6 +363,10 @@
     "license_server_unreachable": "Server lisensi tidak dapat dijangkau. Coba lagi nanti.",
     "license_fix_hint": "Perbarui detail lisensi di Pengaturan untuk mendapatkan akses kembali.",
     "update_license_settings": "Perbarui Pengaturan Lisensi",
-    "back_to_dashboard": "Kembali ke Dashboard"
+    "back_to_dashboard": "Kembali ke Dashboard",
+    "confirm_delete_title": "Hapus item ini?",
+    "confirm_delete_text": "Tindakan ini tidak dapat dibatalkan.",
+    "confirm_delete_confirm": "Ya, hapus",
+    "confirm_delete_cancel": "Batal"
 
 }

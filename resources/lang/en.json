@@ -369,6 +369,10 @@
     "license_server_unreachable": "License server is unreachable. Please try again later.",
     "license_fix_hint": "Update the license details in Settings to regain access.",
     "update_license_settings": "Update License Settings",
-    "back_to_dashboard": "Back to Dashboard"
+    "back_to_dashboard": "Back to Dashboard",
+    "confirm_delete_title": "Delete this item?",
+    "confirm_delete_text": "This action cannot be undone.",
+    "confirm_delete_confirm": "Yes, delete",
+    "confirm_delete_cancel": "Cancel"
 
 }

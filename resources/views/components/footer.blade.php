@@ -70,10 +70,57 @@
 <script src="{{asset('public/assets/js/flat-pickr/flatpickr.js')}}"></script>
 <script src="{{asset('public/assets/js/flat-pickr/custom-flatpickr.js')}}"></script>
 <!-- Plugins JS Ends-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Theme js-->
 <script src="{{asset('public/assets/js/script.js')}}"></script>
 <!-- <script src="{{asset('public/assets/js/theme-customizer/customizer.js')}}"></script> -->
 <!-- Plugin used-->
+<script>
+    (function () {
+        const deleteCopy = {
+            title: @json(__('confirm_delete_title')),
+            text: @json(__('confirm_delete_text')),
+            confirm: @json(__('confirm_delete_confirm')),
+            cancel: @json(__('confirm_delete_cancel')),
+        };
+
+        const getThemeColor = () => {
+            const css = getComputedStyle(document.documentElement);
+            return (css.getPropertyValue('--theme-default') || '#7367f0').trim();
+        };
+
+        document.addEventListener('submit', function (event) {
+            const form = event.target;
+            if (!form || !form.classList.contains('js-confirm-delete')) return;
+            if (form.dataset.confirmed === 'true') return;
+            event.preventDefault();
+
+            Swal.fire({
+                title: form.dataset.title || deleteCopy.title,
+                text: form.dataset.text || deleteCopy.text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: deleteCopy.confirm,
+                cancelButtonText: deleteCopy.cancel,
+                confirmButtonColor: getThemeColor(),
+                cancelButtonColor: '#e2e8f0',
+                reverseButtons: true,
+                focusCancel: true,
+                customClass: {
+                    popup: 'rounded-4',
+                    confirmButton: 'btn btn-primary fw-bold',
+                    cancelButton: 'btn btn-light fw-bold',
+                },
+                buttonsStyling: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.dataset.confirmed = 'true';
+                    form.submit();
+                }
+            });
+        });
+    })();
+</script>
 @stack('styles')
 @stack('scripts')
 </body>

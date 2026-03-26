@@ -180,6 +180,69 @@
         .member-attendance-left .attendance-action {
             margin-top: auto;
         }
+
+        .member-invoice-card {
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 18px 40px rgba(18, 38, 63, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-invoice-card::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            right: -90px;
+            top: -90px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+            z-index: 0;
+        }
+
+        .member-invoice-card.trainer::after {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.18), transparent 70%);
+        }
+
+        .member-invoice-header {
+            position: relative;
+            z-index: 1;
+        }
+
+        .member-invoice-table thead th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #8b95a7;
+            border-bottom: 1px solid #eef2f7 !important;
+        }
+
+        .member-invoice-table td {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border-color: #f2f4f9 !important;
+            font-weight: 600;
+            color: #1f2a37;
+        }
+
+        .invoice-status {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .invoice-status.final {
+            background: rgba(34, 197, 94, 0.15);
+            color: #15803d;
+        }
+
+        .invoice-status.draft {
+            background: rgba(245, 158, 11, 0.15);
+            color: #b45309;
+        }
     </style>
     <div class="page-body">
         <div class="container-fluid">
@@ -432,6 +495,9 @@
             </div>
 
             @else
+            @php
+                $memberCurrencyDecimals = ($memberCurrencyCode ?? 'IDR') === 'IDR' ? 0 : 2;
+            @endphp
             <div class="row">
                 <div class="col-xl-6 mb-4">
                     <div class="card shadow-lg border-0 p-4 h-100 member-attendance-left" style="border-radius: 26px; background: #fff;">
@@ -506,6 +572,93 @@
                                         <tr>
                                             <td colspan="4" class="text-center text-muted py-3">
                                                 {{ __('No attendance records found.') }}
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 mb-4">
+                    <div class="card member-invoice-card trainer border-0 p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3 member-invoice-header">
+                            <div>
+                                <h4 class="fw-bold mb-1 text-dark">{{ __('Trainer Invoices') }}</h4>
+                                <small class="text-muted">{{ __('Last 5 invoices for your trainer sessions') }}</small>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0 member-invoice-table">
+                                <thead>
+                                    <tr>
+                                        <th>{{ __('Invoice No') }}</th>
+                                        <th>{{ __('Package') }}</th>
+                                        <th>{{ __('Total') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($memberRecentTrainerInvoices as $invoice)
+                                        <tr>
+                                            <td>{{ $invoice->invoice_no ?? '-' }}</td>
+                                            <td>{{ $invoice->session_title ?? $invoice->trainer_type ?? '-' }}</td>
+                                            <td>{{ $memberCurrencyLabel }} {{ number_format($invoice->total ?? $invoice->fee ?? 0, $memberCurrencyDecimals, '.', ',') }}</td>
+                                            <td>
+                                                <span class="invoice-status {{ ($invoice->status ?? 'draft') === 'final' ? 'final' : 'draft' }}">
+                                                    {{ ucfirst($invoice->status ?? 'draft') }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted py-3">
+                                                {{ __('No trainer invoices found.') }}
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 mb-4">
+                    <div class="card member-invoice-card border-0 p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3 member-invoice-header">
+                            <div>
+                                <h4 class="fw-bold mb-1 text-dark">{{ __('Renew Invoices') }}</h4>
+                                <small class="text-muted">{{ __('Last 5 membership renewals') }}</small>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0 member-invoice-table">
+                                <thead>
+                                    <tr>
+                                        <th>{{ __('Invoice No') }}</th>
+                                        <th>{{ __('Membership') }}</th>
+                                        <th>{{ __('Total') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($memberRecentRenewInvoices as $invoice)
+                                        <tr>
+                                            <td>{{ $invoice->invoice_no ?? '-' }}</td>
+                                            <td>{{ $invoice->membership_title ?? '-' }}</td>
+                                            <td>{{ $memberCurrencyLabel }} {{ number_format($invoice->total ?? $invoice->fee ?? 0, $memberCurrencyDecimals, '.', ',') }}</td>
+                                            <td>
+                                                <span class="invoice-status {{ ($invoice->status ?? 'draft') === 'final' ? 'final' : 'draft' }}">
+                                                    {{ ucfirst($invoice->status ?? 'draft') }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted py-3">
+                                                {{ __('No renew invoices found.') }}
                                             </td>
                                         </tr>
                                     @endforelse

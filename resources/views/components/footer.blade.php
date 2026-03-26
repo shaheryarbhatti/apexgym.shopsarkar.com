@@ -95,6 +95,8 @@
             if (form.dataset.confirmed === 'true') return;
             event.preventDefault();
 
+            const gapClass = form.dataset.btnGap === 'true' ? 'mx-1' : '';
+
             Swal.fire({
                 title: form.dataset.title || deleteCopy.title,
                 text: form.dataset.text || deleteCopy.text,
@@ -108,8 +110,8 @@
                 focusCancel: true,
                 customClass: {
                     popup: 'rounded-4',
-                    confirmButton: 'btn btn-primary fw-bold',
-                    cancelButton: 'btn btn-light fw-bold',
+                    confirmButton: `btn btn-primary fw-bold ${gapClass}`.trim(),
+                    cancelButton: `btn btn-light fw-bold ${gapClass}`.trim(),
                 },
                 buttonsStyling: false,
             }).then((result) => {

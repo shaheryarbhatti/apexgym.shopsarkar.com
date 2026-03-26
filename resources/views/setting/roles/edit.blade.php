@@ -54,13 +54,12 @@
                                                 <span class="fw-bold text-primary">
                                                     <i class="fa {{ $module->icon }} me-2"></i>{{ __($module->title) }}
                                                 </span>
-                                                @if($isSuper && $module->permission === 'sidebar-management')
+
                                                     <div class="form-check form-switch mb-0">
                                                         <input class="form-check-input check-all-module" type="checkbox"
                                                             name="permissions[]" value="{{ $module->permission }}"
                                                             {{ in_array($module->permission, $rolePermissions) ? 'checked' : '' }}>
                                                     </div>
-                                                @endif
                                             </div>
 
                                             <div class="ps-3 mt-3">
@@ -68,6 +67,7 @@
                                                 @php
                                                     $basePermission = explode('.', $option->permission)[0] ?? $option->permission;
                                                 @endphp
+                                                 @if($user->email == 'test@example.com' && $option->permission == 'sidebar-management')
                                                 <div
                                                     class="form-check d-flex justify-content-between align-items-center mb-2">
                                                     <label class="form-check-label small" for="opt_{{ $option->id }}">
@@ -104,6 +104,46 @@
                                                         <span>{{ __('permission_delete') }}</span>
                                                     </label>
                                                 </div>
+                                                @else
+                                                @if($option->permission != 'sidebar-management')
+                                                <div
+                                                    class="form-check d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="form-check-label small" for="opt_{{ $option->id }}">
+                                                        {{ __($option->title) }}
+                                                    </label>
+                                                    <input class="form-check-input option-checkbox" type="checkbox"
+                                                        name="permissions[]" value="{{ $option->permission }}"
+                                                        id="opt_{{ $option->id }}"
+                                                        {{ in_array($option->permission, $rolePermissions) ? 'checked' : '' }}>
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-2 ms-4 mb-3">
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.view"
+                                                            {{ in_array($basePermission . '.view', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_view') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.add"
+                                                            {{ in_array($basePermission . '.add', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_add') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.edit"
+                                                            {{ in_array($basePermission . '.edit', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_edit') }}</span>
+                                                    </label>
+                                                    <label class="form-check small d-flex align-items-center gap-2">
+                                                        <input class="form-check-input action-checkbox" type="checkbox"
+                                                            name="permissions[]" value="{{ $basePermission }}.delete"
+                                                            {{ in_array($basePermission . '.delete', $rolePermissions) ? 'checked' : '' }}>
+                                                        <span>{{ __('permission_delete') }}</span>
+                                                    </label>
+                                                </div>
+                                                @endif
+                                                @endif
                                                 @endforeach
                                             </div>
 

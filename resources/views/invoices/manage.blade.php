@@ -98,6 +98,7 @@
                                             <th>#</th>
                                             <th>{{ __('invoice_no') }}</th>
                                             <th>{{ __('item') }}</th>
+                                            <th>{{ __('start_date') }}</th>
                                             <th>{{ __('total') }}</th>
                                             <th>{{ __('expiry_date') }}</th>
                                             <th>{{ __('status') }}</th>
@@ -350,6 +351,11 @@
                 {
                     data: 'item',
                     name: 'item',
+                    orderable: false
+                },
+                {
+                    data: 'start_date',
+                    name: 'start_date',
                     orderable: false
                 },
                 {

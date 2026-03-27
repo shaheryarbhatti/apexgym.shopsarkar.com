@@ -158,9 +158,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-price-visit">{{ __('settings_tab_price_visit') }}</a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#settings-freeze-price">{{ __('settings_tab_freeze_price') }}</a>
-                                </li>
+                                </li> -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-trainer-price">{{ __('settings_tab_trainer_price') }}</a>
                                 </li>

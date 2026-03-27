@@ -25,6 +25,14 @@
         </div>
     </div>
 </footer>
+@if (session('guest_mode_block'))
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+        <div class="alert alert-warning alert-dismissible fade show shadow-sm mb-0">
+            {{ session('guest_mode_block') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
 </div>
 </div>
 

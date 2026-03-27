@@ -149,9 +149,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-smtp">{{ __('settings_tab_smtp') }}</a>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a class="nav-link" href="#settings-license">{{ __('settings_tab_license') }}</a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-membership-price">{{ __('settings_tab_membership_price') }}</a>
                                 </li>
@@ -409,7 +409,7 @@
 
                             <hr class="my-4">
 
-                            <div class="row settings-section" id="settings-license">
+                            {{-- <div class="row settings-section" id="settings-license">
                                 <div class="col-12 mb-2">
                                     <h5 class="mb-1">{{ __('settings_license') }}</h5>
                                     <p class="text-muted mb-0">{{ __('settings_license_desc') }}</p>
@@ -438,7 +438,7 @@
                                     <input type="text" name="license_project_key" class="form-control"
                                            value="{{ \App\Models\Setting::get('license_project_key') }}" placeholder="PRJ-XXXX-XXXX">
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <hr class="my-4">
 

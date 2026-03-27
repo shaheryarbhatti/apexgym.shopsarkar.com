@@ -80,28 +80,26 @@
     /* Base pagination container */
     .dataTables_paginate .pagination {
         margin: 0 auto !important;
-        /* Center it */
         justify-content: center;
-        gap: 0.25rem;
-        /* Space between buttons */
-        padding: 0.5rem 0;
+        gap: 0.2rem;
+        padding: 0.25rem 0;
     }
 
     /* Each page item/button */
     .dataTables_paginate .page-item .page-link {
-        border-radius: 50% !important;
-        /* Fully rounded like template demo */
-        width: 38px;
-        height: 38px;
-        line-height: 38px;
+        border-radius: 8px !important;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
         text-align: center;
         padding: 0;
-        margin: 0 2px;
-        border: 1px solid #dee2e6;
-        color: #495057;
+        margin: 0 1px;
+        border: 1px solid #e2e6ea;
+        color: #5a6470;
         background-color: #fff;
-        transition: all 0.2s ease;
-        font-weight: 500;
+        transition: all 0.15s ease;
+        font-weight: 600;
+        font-size: 0.85rem;
     }
 
     /* Hover effect (like template subtle hover) */
@@ -109,7 +107,6 @@
         background-color: var(--theme-default, #7367f0) !important;
         color: white !important;
         border-color: var(--theme-default, #7367f0) !important;
-        transform: scale(1.08);
     }
 
     /* Active / current page (blue background, white text) */
@@ -117,26 +114,26 @@
         background-color: var(--theme-default, #7367f0) !important;
         border-color: var(--theme-default, #7367f0) !important;
         color: white !important;
-        box-shadow: 0 2px 6px rgba(115, 103, 240, 0.3);
-        /* subtle shadow like premium templates */
-        font-weight: bold;
+        box-shadow: 0 3px 10px rgba(115, 103, 240, 0.25);
+        font-weight: 700;
     }
 
     /* Disabled buttons (Previous/Next when at end) */
     .dataTables_paginate .page-item.disabled .page-link {
-        color: #adb5bd !important;
-        background-color: #f8f9fa !important;
-        border-color: #dee2e6 !important;
+        color: #b7c0c8 !important;
+        background-color: #f6f7f9 !important;
+        border-color: #e2e6ea !important;
         cursor: not-allowed;
     }
 
     /* First/Last/Previous/Next text buttons */
     .dataTables_paginate .page-item:first-child .page-link,
     .dataTables_paginate .page-item:last-child .page-link {
-        border-radius: 0.375rem !important;
-        /* Less round for arrows */
+        border-radius: 10px !important;
         width: auto;
-        padding: 0 1rem;
+        padding: 0 0.6rem;
+        min-width: 44px;
+        font-size: 0.8rem;
     }
 
     /* Extra spacing below search bar & above table */
@@ -145,16 +142,16 @@
     }
 
     .dataTables_wrapper .dataTables_paginate {
-        margin-top: 1.5rem !important;
+        margin-top: 1rem !important;
     }
 
     /* Mobile adjustments */
     @media (max-width: 576px) {
         .dataTables_paginate .page-link {
-            width: 32px;
-            height: 32px;
-            line-height: 32px;
-            font-size: 0.875rem;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 0.8rem;
         }
     }
     </style>

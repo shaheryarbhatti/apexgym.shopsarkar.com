@@ -378,5 +378,8 @@
     "permission_add_visit_invoice": "Tambah Invoice Kunjungan",
     "permission_send_expiry_email": "Kirim Email Kedaluwarsa",
     "permission_download_card": "Unduh Kartu"
+    ,"download_excel": "Unduh Excel"
+    ,"export_members": "Ekspor Anggota"
+    ,"select_columns_export": "Pilih kolom yang ingin diekspor."
 
 }

@@ -23,6 +23,7 @@
         $user = auth()->user();
         $legacyMemberBase = 'manage-' . \Illuminate\Support\Str::singular('members');
         $canMemberAdd = $user && $user->canAny(['members.add', $legacyMemberBase . '.add']);
+        $canMemberExport = $user && $user->canAny(['members.view', $legacyMemberBase . '.view', 'members.manage', $legacyMemberBase . '.manage']);
         $canMemberRenew = $user && $user->canAny(['members.renew', $legacyMemberBase . '.renew']);
         $canMemberTrainer = $user && $user->canAny(['members.add_trainer_invoice', $legacyMemberBase . '.add_trainer_invoice']);
         $canMemberVisit = $user && $user->canAny(['members.add_visit_invoice', $legacyMemberBase . '.add_visit_invoice']);
@@ -37,11 +38,18 @@
                 <div class="card" style="margin-top: 20px;">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">{{ __('manage_members') }}</h4>
+                        <div class="d-flex align-items-center gap-2">
+                        @if($canMemberExport)
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#memberExportModal">
+                                <i class="fa fa-download me-2"></i> {{ __('download_excel') }}
+                            </button>
+                        @endif
                         @if($canMemberAdd)
                             <a href="{{ route('members.add') }}" class="btn btn-primary">
                                 <i class="fa fa-plus me-2"></i> {{ __('add_new_member') }}
                             </a>
                         @endif
+                        </div>
                     </div>
 
                     <div class="card-body">
@@ -188,6 +196,59 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="memberExportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ __('export_members') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="GET" action="{{ route('members.export') }}">
+                <div class="modal-body">
+                    <p class="text-muted mb-3">{{ __('select_columns_export') }}</p>
+                    <div class="row g-3">
+                        @php
+                            $exportColumns = [
+                                'member_code' => __('member_code'),
+                                'full_name' => __('full_name'),
+                                'email' => __('email'),
+                                'phone' => __('phone'),
+                                'status' => __('status'),
+                                'gender' => __('gender'),
+                                'nik' => __('nik'),
+                                'place_of_birth' => __('place_of_birth'),
+                                'date_of_birth' => __('date_of_birth'),
+                                'blood_type' => __('blood_type'),
+                                'religion' => __('religion'),
+                                'marital_status' => __('marital_status'),
+                                'occupation' => __('occupation'),
+                                'citizenship' => __('citizenship'),
+                                'address' => __('address'),
+                                'created_at' => __('registration_date'),
+                                'updated_at' => __('last_update'),
+                            ];
+                            $defaultCols = ['member_code', 'full_name', 'email', 'phone', 'status'];
+                        @endphp
+                        @foreach($exportColumns as $key => $label)
+                            <div class="col-md-4">
+                                <label class="form-check d-flex align-items-center gap-2">
+                                    <input class="form-check-input" type="checkbox" name="columns[]" value="{{ $key }}"
+                                           {{ in_array($key, $defaultCols, true) ? 'checked' : '' }}>
+                                    <span>{{ $label }}</span>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('download_excel') }}</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -384,5 +384,8 @@
     "permission_add_visit_invoice": "Add Visit Invoice",
     "permission_send_expiry_email": "Send Expiry Email",
     "permission_download_card": "Download Card"
+    ,"download_excel": "Download Excel"
+    ,"export_members": "Export Members"
+    ,"select_columns_export": "Select the columns you want to export."
 
 }

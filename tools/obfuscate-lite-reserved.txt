@@ -76,3 +76,4 @@ memberEmails
 memberPhotos
 trainerPhotos
 photoPath
+user

@@ -50,3 +50,13 @@ delete
 members
 validated
 currentUser
+columns
+allowed
+selected
+filename
+handle
+rows
+row
+line
+col
+value

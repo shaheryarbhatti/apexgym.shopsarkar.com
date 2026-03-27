@@ -379,7 +379,14 @@
     "permission_send_expiry_email": "Kirim Email Kedaluwarsa",
     "permission_download_card": "Unduh Kartu",
     "permission_export_members": "Ekspor Anggota",
-    "permission_system_documentation": "Dokumentasi Sistem"
+    "permission_system_documentation": "Dokumentasi Sistem",
+    "permission_delete_all_members": "Hapus Semua Anggota",
+    "permission_delete_all_trainers": "Hapus Semua Pelatih",
+    "trainer_actions": "Aksi Pelatih",
+    "delete_all_members": "Hapus Semua Anggota",
+    "delete_all_trainers": "Hapus Semua Pelatih",
+    "all_members_deleted_successfully": "Semua anggota berhasil dihapus.",
+    "all_trainers_deleted_successfully": "Semua pelatih berhasil dihapus."
     ,"system_documentation": "Dokumentasi Sistem"
     ,"system_documentation_desc": "Panduan lengkap untuk mengelola anggota, faktur, pelatih, presensi, dan pengaturan."
     ,"quick_guide": "Panduan Cepat"

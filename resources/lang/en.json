@@ -385,8 +385,15 @@
     "permission_send_expiry_email": "Send Expiry Email",
     "permission_download_card": "Download Card",
     "permission_export_members": "Export Members",
-    "permission_system_documentation": "System Documentation"
-    ,"download_excel": "Download Excel"
+    "permission_system_documentation": "System Documentation",
+    "permission_delete_all_members": "Delete All Members",
+    "permission_delete_all_trainers": "Delete All Trainers",
+    "trainer_actions": "Trainer Actions",
+    "delete_all_members": "Delete All Members",
+    "delete_all_trainers": "Delete All Trainers",
+    "all_members_deleted_successfully": "All members deleted successfully.",
+    "all_trainers_deleted_successfully": "All trainers deleted successfully.",
+    "download_excel": "Download Excel"
     ,"export_members": "Export Members"
     ,"select_columns_export": "Select the columns you want to export."
     ,"system_documentation": "System Documentation"

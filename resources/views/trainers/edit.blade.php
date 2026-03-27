@@ -11,6 +11,12 @@
     @extends('layouts.app')
     @section('content')
 
+    @php
+        $storedStatus = $trainer->status;
+        $isActiveStored = ($storedStatus === 1 || $storedStatus === '1' || $storedStatus === true);
+        $isActive = (bool) old('status', $isActiveStored ? 1 : 0);
+    @endphp
+
     <div class="page-body">
         <div class="container-fluid">
             <div class="row">
@@ -102,15 +108,14 @@
                                             @enderror
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label class="col-form-label" for="status">{{ __('status') }}</label>
-                                            <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                                                <option value="active" {{ old('status', $trainer->status) == 'active' ? 'selected' : '' }}>Active</option>
-                                                <option value="inactive" {{ old('status', $trainer->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                                <option value="pending" {{ old('status', $trainer->status) == 'pending' ? 'selected' : '' }}>Pending</option>
-                                            </select>
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" name="status" id="status" value="1"
+                                                    {{ $isActive ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="status">{{ __('active') }}</label>
+                                            </div>
                                             @error('status')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
 

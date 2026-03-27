@@ -16,6 +16,7 @@
         $user = auth()->user();
         $legacyTrainerBase = 'manage-' . \Illuminate\Support\Str::singular('trainers');
         $canTrainerAdd = $user && $user->canAny(['trainers.add', $legacyTrainerBase . '.add']);
+        $canTrainerDeleteAll = $user && $user->canAny(['trainers.delete_all', $legacyTrainerBase . '.delete_all']);
     @endphp
 
     <div class="page-body">
@@ -25,11 +26,22 @@
                     <div class="card" style="margin-top: 20px;">
                         <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">{{ __('manage_trainers') }}</h4>
-                            @if($canTrainerAdd)
-                                <a href="{{ route('trainers.add') }}" class="btn btn-primary">
-                                    <i class="fa fa-plus me-2"></i> {{ __('add_new_trainer') }}
-                                </a>
-                            @endif
+                            <div class="d-flex align-items-center gap-2">
+                                @if($canTrainerDeleteAll)
+                                    <form action="{{ route('trainers.destroyAll') }}" method="POST" class="js-confirm-delete" data-btn-gap="true">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            <i class="fa fa-trash me-2"></i> {{ __('delete_all_trainers') }}
+                                        </button>
+                                    </form>
+                                @endif
+                                @if($canTrainerAdd)
+                                    <a href="{{ route('trainers.add') }}" class="btn btn-primary">
+                                        <i class="fa fa-plus me-2"></i> {{ __('add_new_trainer') }}
+                                    </a>
+                                @endif
+                            </div>
                         </div>
 
                         <div class="card-body">

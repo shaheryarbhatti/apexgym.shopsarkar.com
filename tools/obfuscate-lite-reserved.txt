@@ -71,3 +71,8 @@ visitStart
 visitEnd
 showVisitAnalytics
 cacheKey
+memberIds
+memberEmails
+memberPhotos
+trainerPhotos
+photoPath

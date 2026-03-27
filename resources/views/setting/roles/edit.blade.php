@@ -181,6 +181,18 @@
                                                                 {{ in_array('members.download_card', $rolePermissions) ? 'checked' : '' }}>
                                                             <span>{{ __('permission_download_card') }}</span>
                                                         </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.export"
+                                                                {{ in_array('members.export', $rolePermissions) ? 'checked' : '' }}>
+                                                            <span>{{ __('permission_export_members') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.documentation"
+                                                                {{ in_array('members.documentation', $rolePermissions) ? 'checked' : '' }}>
+                                                            <span>{{ __('permission_system_documentation') }}</span>
+                                                        </label>
                                                     </div>
                                                 </div>
                                             @endif
@@ -221,4 +233,3 @@
     });
     </script>
     @endsection
-

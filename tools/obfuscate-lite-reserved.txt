@@ -9,7 +9,6 @@ trainer
 visit
 payment
 settings
-query
 builder
 model
 guard
@@ -32,8 +31,6 @@ startDate
 endDate
 isTrainer
 isVisit
-query
-invoice
 memberName
 title
 amount
@@ -60,3 +57,17 @@ row
 line
 col
 value
+visitLabels
+visitCounts
+visitTotal
+uniqueVisitors
+visitToday
+countryLabels
+countryCounts
+visitRangeStart
+visitRangeEnd
+visitRangeLabel
+visitStart
+visitEnd
+showVisitAnalytics
+cacheKey

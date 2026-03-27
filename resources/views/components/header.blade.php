@@ -135,6 +135,19 @@
         border-color: var(--theme-secondary) !important;
         color: #ffffff !important;
     }
+
+    .doc-blink {
+        animation: docPulse 1.8s ease-in-out infinite;
+        box-shadow: 0 0 0 rgba(79, 70, 229, 0.5);
+        border-radius: 999px;
+        font-weight: 700;
+    }
+
+    @keyframes docPulse {
+        0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.35); }
+        70% { box-shadow: 0 0 0 14px rgba(79, 70, 229, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    }
 </style>
 
 </head>
@@ -178,7 +191,18 @@
                     </div>
                 </form>
                 <div class="nav-right col-xl-8 col-lg-12 col-auto pull-right right-header p-0">
+                    @php
+                        $docUser = auth()->user();
+                        $canDocumentation = $docUser && ($docUser->hasRole('Super Admin') || $docUser->canAny(['members.documentation', 'manage-member.documentation']));
+                    @endphp
                     <ul class="nav-menus">
+                        @if ($canDocumentation)
+                            <li class="d-none d-md-inline-block me-3">
+                                <a href="{{ route('documentation') }}" class="btn btn-primary doc-blink px-3">
+                                    <i class="fa fa-book me-2"></i>{{ __('system_documentation') }}
+                                </a>
+                            </li>
+                        @endif
                         <li class="language-nav">
                             <div class="translate_wrapper">
                                 <div class="current_lang">

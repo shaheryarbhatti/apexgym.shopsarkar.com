@@ -171,6 +171,16 @@
                                                                 name="permissions[]" value="members.download_card">
                                                             <span>{{ __('permission_download_card') }}</span>
                                                         </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.export">
+                                                            <span>{{ __('permission_export_members') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.documentation">
+                                                            <span>{{ __('permission_system_documentation') }}</span>
+                                                        </label>
                                                     </div>
                                                 </div>
                                             @endif
@@ -210,4 +220,3 @@
     });
     </script>
     @endsection
-

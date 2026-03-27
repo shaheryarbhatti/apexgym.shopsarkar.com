@@ -23,7 +23,7 @@
         $user = auth()->user();
         $legacyMemberBase = 'manage-' . \Illuminate\Support\Str::singular('members');
         $canMemberAdd = $user && $user->canAny(['members.add', $legacyMemberBase . '.add']);
-        $canMemberExport = $user && $user->canAny(['members.view', $legacyMemberBase . '.view', 'members.manage', $legacyMemberBase . '.manage']);
+        $canMemberExport = $user && $user->canAny(['members.export', $legacyMemberBase . '.export']);
         $canMemberRenew = $user && $user->canAny(['members.renew', $legacyMemberBase . '.renew']);
         $canMemberTrainer = $user && $user->canAny(['members.add_trainer_invoice', $legacyMemberBase . '.add_trainer_invoice']);
         $canMemberVisit = $user && $user->canAny(['members.add_visit_invoice', $legacyMemberBase . '.add_visit_invoice']);

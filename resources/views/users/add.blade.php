@@ -113,7 +113,7 @@
                                             <div class="mb-3">
                                                 <div class="form-check form-switch form-check-inline">
                                                     <input class="form-check-input" type="checkbox" name="status"
-                                                        id="status" {{ old('status', $user->status) ? 'checked' : '' }}>
+                                                        id="status" value="1" {{ old('status', 1) ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="status">{{ __('status') }}
                                                         ({{ __('active') }})</label>
                                                 </div>
@@ -127,9 +127,6 @@
                                             <label class="col-form-label" for="image">{{ __('user_image') }}</label>
                                             <input type="file" name="image" id="image"
                                                 class="form-control @error('image') is-invalid @enderror">
-                                            @if(isset($user) && $user->image)
-                                            <small class="text-muted">Current: {{ basename($user->image) }}</small>
-                                            @endif
                                             @error('image')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror

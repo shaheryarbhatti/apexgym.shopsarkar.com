@@ -11,6 +11,10 @@
     @extends('layouts.app')
     @section('content')
 
+    @php
+        $editUser = $user ?? null;
+    @endphp
+
     <div class="page-body">
         <div class="container-fluid">
             <div class="row">
@@ -38,7 +42,7 @@
                             </div>
                             @endif
 
-                            <form method="POST" action="{{ route('users.update', $user->id) }}"
+                            <form method="POST" action="{{ route('users.update', $editUser->id) }}"
                                 enctype="multipart/form-data" class="theme-form">
                                 @csrf
                                 @method('PUT')
@@ -49,9 +53,9 @@
                                         <div class="mb-3">
                                             <label class="col-form-label" for="name">{{ __('name') }} <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" name="name" id="name"
+                                                <input type="text" name="name" id="name"
                                                 class="form-control @error('name') is-invalid @enderror"
-                                                value="{{ old('name', $user->name) }}" placeholder="{{ __('name') }}"
+                                                value="{{ old('name', $editUser->name) }}" placeholder="{{ __('name') }}"
                                                 required autofocus>
                                             @error('name')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -61,9 +65,9 @@
                                         <div class="mb-3">
                                             <label class="col-form-label" for="email">{{ __('email') }} <span
                                                     class="text-danger">*</span></label>
-                                            <input type="email" name="email" id="email"
+                                                <input type="email" name="email" id="email"
                                                 class="form-control @error('email') is-invalid @enderror"
-                                                value="{{ old('email', $user->email) }}" placeholder="{{ __('email') }}"
+                                                value="{{ old('email', $editUser->email) }}" placeholder="{{ __('email') }}"
                                                 required>
                                             @error('email')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -103,7 +107,7 @@
                                                 <option value="">Select Role</option>
                                                 @foreach($roles as $role)
                                                 <option value="{{ $role->id }}"
-                                                    {{ old('role_id', $user->roles->first()->id ?? '') == $role->id ? 'selected' : '' }}>
+                                                    {{ old('role_id', $editUser->roles->first()->id ?? '') == $role->id ? 'selected' : '' }}>
                                                     {{ $role->name }}</option>
                                                 @endforeach
                                             </select>
@@ -112,7 +116,7 @@
                                             <div class="form-check form-switch form-check-inline">
                                                 <input class="form-check-input" type="checkbox" name="status"
                                                     id="status" value="1"
-                                                    {{ old('status', $user->status) ? 'checked' : '' }}>
+                                                    {{ old('status', $editUser->status) ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="status">{{ __('status') }}</label>
                                             </div>
                                         </div>
@@ -124,11 +128,11 @@
                                             <label class="col-form-label" for="image">{{ __('user_image') }}</label>
                                             <input type="file" name="image" id="image"
                                                 class="form-control @error('image') is-invalid @enderror">
-                                            @if(isset($user) && $user->image)
+                                            @if($editUser && $editUser->image)
                                             <img id="preview"
-                                                src="{{ $user->image ? asset('public/storage/'.$user->image) : '#' }}"
+                                                src="{{ $editUser->image ? asset('public/storage/'.$editUser->image) : '#' }}"
                                                 alt="Preview"
-                                                style="max-height: 100px; {{ $user->image ? '' : 'display: none;' }} border-radius: 8px;">
+                                                style="max-height: 100px; {{ $editUser->image ? '' : 'display: none;' }} border-radius: 8px;">
                                             @endif
                                             @error('image')
                                             <div class="invalid-feedback">{{ $message }}</div>

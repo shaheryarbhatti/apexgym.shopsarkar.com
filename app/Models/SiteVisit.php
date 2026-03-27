@@ -1,0 +1,2 @@
+<?php
+ namespace App\Models; use Illuminate\Database\Eloquent\Model; class SiteVisit extends Model { protected $fillable = [ 'user_id', 'ip_address', 'country', 'country_code', 'visited_at', ]; protected $casts = [ 'visited_at' => 'datetime', ]; public function user() { return $this->belongsTo(User::class, base64_decode('dXNlcl9pZA=='), base64_decode('aWQ=')); } } 

@@ -244,6 +244,9 @@
             color: #b45309;
         }
     </style>
+    @php
+        $showVisitAnalytics = Auth::user()->hasRole('Super Admin');
+    @endphp
     <div class="page-body">
         <div class="container-fluid">
             <div class="page-title">
@@ -494,6 +497,130 @@
                 </div>
             </div>
 
+            @if($showVisitAnalytics)
+
+            <div class="row mt-2">
+                <div class="col-12 mb-3">
+                    <div class="card soft-card border-0 p-3">
+                        <form method="GET" class="row g-2 align-items-end">
+                            <div class="col-sm-5 col-lg-4">
+                                <label class="form-label fw-semibold small text-muted">{{ __('Start Date') }}</label>
+                                <input type="date" name="visit_start" class="form-control"
+                                       value="{{ $visitRangeStart }}">
+                            </div>
+                            <div class="col-sm-5 col-lg-4">
+                                <label class="form-label fw-semibold small text-muted">{{ __('End Date') }}</label>
+                                <input type="date" name="visit_end" class="form-control"
+                                       value="{{ $visitRangeEnd }}">
+                            </div>
+                            <div class="col-sm-2 col-lg-4 d-flex gap-2">
+                                <button type="submit" class="btn btn-primary flex-fill">{{ __('Filter') }}</button>
+                                <a href="{{ route('home') }}" class="btn btn-outline-secondary flex-fill">{{ __('Reset') }}</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-xl-7 mb-4">
+                    <div class="card chart-card border-0">
+                        <div class="card-header bg-white border-0">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="chart-title">{{ __('Portal Visits') }}</div>
+                                    <div class="chart-subtitle">{{ $visitRangeLabel ?? __('Last 30 Days') }}</div>
+                                    <div class="chart-subtitle">
+                                        {{ __('Total Visits') }}: {{ number_format($visitTotal) }} ·
+                                        {{ __('Unique IPs') }}: {{ number_format($uniqueVisitors) }}
+                                    </div>
+                                </div>
+                                <span class="badge bg-primary-subtle text-primary">{{ __('Visits') }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="row g-2 mb-3">
+                                <div class="col-sm-6">
+                                    <div class="card border-0 shadow-sm h-100" style="border-radius: 14px; background: #f4f8ff;">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <div class="text-muted small fw-semibold">{{ __('Today') }}</div>
+                                                <div class="fw-bold fs-5 text-dark">{{ number_format($visitToday) }}</div>
+                                            </div>
+                                            <span class="badge bg-primary text-white">{{ __('Visits') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card border-0 shadow-sm h-100" style="border-radius: 14px; background: #f0fff4;">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <div class="text-muted small fw-semibold">{{ $visitRangeLabel ?? __('Last 30 Days') }}</div>
+                                                <div class="fw-bold fs-5 text-dark">{{ number_format($visitTotal) }}</div>
+                                            </div>
+                                            <span class="badge bg-success text-white">{{ __('Visits') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(($visitTotal ?? 0) === 0)
+                                <div class="alert alert-light border text-center mt-3">
+                                    {{ __('No visitor data yet. Log in once to create the first visit record.') }}
+                                </div>
+                            @endif
+                            <div id="portalVisitsChart" style="height: 280px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-5 mb-4">
+                    <div class="card chart-card border-0">
+                        <div class="card-header bg-white border-0">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="chart-title">{{ __('Visitor Countries') }}</div>
+                                    <div class="chart-subtitle">{{ __('Top Locations') }}</div>
+                                </div>
+                                <span class="badge bg-info-subtle text-info">{{ __('Countries') }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="card border-0 shadow-sm mb-3" style="border-radius: 14px; background: #eef6ff;">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="text-muted small fw-semibold">{{ __('Total Unique IPs') }}</div>
+                                        <div class="fw-bold fs-5 text-dark">{{ number_format($uniqueVisitors) }}</div>
+                                    </div>
+                                    <span class="badge bg-info text-white">{{ __('Unique') }}</span>
+                                </div>
+                            </div>
+                            <div id="portalCountriesChart" style="height: 280px;"></div>
+                            <div class="table-responsive mt-3">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>{{ __('Country') }}</th>
+                                            <th class="text-end">{{ __('Visits') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($countryLabels as $index => $country)
+                                            <tr>
+                                                <td class="fw-semibold text-dark">{{ $country }}</td>
+                                                <td class="text-end text-muted">{{ number_format($countryCounts[$index] ?? 0) }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="2" class="text-center text-muted">{{ __('No visitor data yet.') }}</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             @else
             @php
                 $memberCurrencyDecimals = ($memberCurrencyCode ?? 'IDR') === 'IDR' ? 0 : 2;
@@ -681,6 +808,10 @@
             const invoiceData = @json($invoiceMonthly ?? []);
             const trainerInvoiceData = @json($trainerInvoiceMonthly ?? []);
             const trainerData = @json($trainerMonthly ?? []);
+            const visitLabels = @json($visitLabels ?? []);
+            const visitCounts = @json($visitCounts ?? []);
+            const countryLabels = @json($countryLabels ?? []);
+            const countryCounts = @json($countryCounts ?? []);
 
             const css = getComputedStyle(document.documentElement);
             const primary = (css.getPropertyValue('--theme-default') || '#7367f0').trim();
@@ -741,6 +872,33 @@
                 colors: months.map(() => info),
                 fill: { opacity: 0.85 }
             });
+
+            if (visitLabels.length) {
+                renderChart('#portalVisitsChart', {
+                    ...baseOptions,
+                    chart: { ...baseOptions.chart, type: 'area' },
+                    xaxis: { categories: visitLabels, labels: { style: { colors: '#6b7280' } } },
+                    series: [{ name: 'Visits', data: visitCounts }],
+                    stroke: { curve: 'smooth', width: 3 },
+                    fill: {
+                        type: 'gradient',
+                        gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.05, stops: [0, 90, 100] }
+                    },
+                    colors: [primary]
+                });
+            }
+
+            if (countryLabels.length) {
+                renderChart('#portalCountriesChart', {
+                    chart: { height: 280, type: 'donut' },
+                    series: countryCounts,
+                    labels: countryLabels,
+                    colors: ['#4f46e5', '#22c55e', '#f59e0b', '#14b8a6', '#e11d48', '#0ea5e9', '#a855f7'],
+                    legend: { position: 'bottom' },
+                    dataLabels: { enabled: true },
+                    tooltip: { theme: 'light' }
+                });
+            }
         });
     </script>
     @endpush

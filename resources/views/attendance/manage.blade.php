@@ -183,7 +183,7 @@ $(document).ready(function() {
             },
             {
                 data: 'member_name',
-                name: 'member.full_name'
+                name: 'user.name'
             },
             {
                 data: 'attendance_date',
@@ -191,11 +191,11 @@ $(document).ready(function() {
             }, // Data mapped from created_at
             {
                 data: 'check_in',
-                name: 'check_in'
+                name: 'checkin_time'
             },
             {
                 data: 'check_out',
-                name: 'check_out'
+                name: 'checkout_time'
             }
         ],
         pageLength: 10,

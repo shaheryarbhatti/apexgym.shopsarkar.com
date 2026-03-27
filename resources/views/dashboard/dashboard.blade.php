@@ -267,7 +267,7 @@
         </div>
 
         <div class="container-fluid">
-            @if (Auth::user()->hasRole(['Admin', 'Super Admin']))
+            @if (Auth::user()->hasRole(['Admin', 'Super Admin', 'Manager']))
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="dashboard-hero d-flex flex-wrap align-items-center justify-content-between">

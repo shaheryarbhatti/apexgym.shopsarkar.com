@@ -363,7 +363,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_smtp_host') }}</label>
                                     <input type="text" name="smtp_host" class="form-control"
-                                           value="{{ \App\Models\Setting::get('smtp_host') }}" placeholder="smtp.example.com">
+                                           value="{{ $guestMode ? 'smtp.example.com' : \App\Models\Setting::get('smtp_host') }}" placeholder="smtp.example.com">
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -385,7 +385,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_smtp_username') }}</label>
                                     <input type="text" name="smtp_username" class="form-control"
-                                           value="{{ \App\Models\Setting::get('smtp_username') }}" placeholder="user@example.com">
+                                           value="{{ $guestMode ? 'user@example.com' : \App\Models\Setting::get('smtp_username') }}" placeholder="user@example.com">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -397,7 +397,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_smtp_from_email') }}</label>
                                     <input type="email" name="smtp_from_email" class="form-control"
-                                           value="{{ \App\Models\Setting::get('smtp_from_email') }}" placeholder="noreply@example.com">
+                                           value="{{ $guestMode ? 'noreply@example.com' : \App\Models\Setting::get('smtp_from_email') }}" placeholder="noreply@example.com">
                                 </div>
 
                                 <div class="col-md-6 mb-3">

@@ -76,4 +76,6 @@ memberEmails
 memberPhotos
 trainerPhotos
 photoPath
+timezones
+timezoneValue
 user

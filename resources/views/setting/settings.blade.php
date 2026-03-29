@@ -21,6 +21,8 @@
     $themeSecondary = \App\Models\Setting::get('theme_secondary', '#00cfe8');
     $themeAccent = \App\Models\Setting::get('theme_accent', '#0f9b8e');
     $sidebarDashboardTextColor = \App\Models\Setting::get('sidebar_dashboard_text_color', '#ffffff');
+    $timezoneValue = \App\Models\Setting::get('timezone', config('app.timezone', 'UTC'));
+    $timezones = \DateTimeZone::listIdentifiers();
 @endphp
 <script>
     window.gymCurrency = {
@@ -148,6 +150,9 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-smtp">{{ __('settings_tab_smtp') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#settings-timezone">{{ __('settings_tab_timezone') }}</a>
                                 </li>
                                 {{-- <li class="nav-item">
                                     <a class="nav-link" href="#settings-license">{{ __('settings_tab_license') }}</a>
@@ -408,6 +413,23 @@
                             </div>
 
                             <hr class="my-4">
+
+                            <div class="row settings-section" id="settings-timezone">
+                                <div class="col-12 mb-2">
+                                    <h5 class="mb-1">{{ __('settings_timezone') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('settings_timezone_desc') }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_timezone_label') }}</label>
+                                    <select name="timezone" class="form-select select2-timezone" {{ $guestMode ? 'disabled' : '' }}>
+                                        @foreach ($timezones as $tz)
+                                            <option value="{{ $tz }}" {{ $timezoneValue === $tz ? 'selected' : '' }}>
+                                                {{ $tz }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
                             {{-- <div class="row settings-section" id="settings-license">
                                 <div class="col-12 mb-2">
@@ -1285,5 +1307,24 @@
             });
         });
     })();
-</script>
+    </script>
+
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('public/assets/css/vendors/select2.css') }}">
+    @endpush
+
+    @push('scripts')
+        <script src="{{ asset('public/assets/js/select2/select2.full.min.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                const $tz = $('.select2-timezone');
+                if ($tz.length) {
+                    $tz.select2({
+                        width: '100%',
+                        minimumResultsForSearch: 0,
+                    });
+                }
+            });
+        </script>
+    @endpush
 @endsection

@@ -50,6 +50,7 @@
     $metaKeywords = \App\Models\Setting::get('meta_keywords', 'gym, fitness, membership, attendance, payments');
     $metaDescription = \App\Models\Setting::get('meta_description', 'Gym management system for memberships, attendance, and billing.');
     $metaAuthor = \App\Models\Setting::get('meta_author', 'Sky Fitness Gym');
+    $currentTimezone = \App\Models\Setting::get('timezone', config('app.timezone', 'UTC'));
 @endphp
 <meta name="keywords" content="{{ $metaKeywords }}">
 <meta name="description" content="{{ $metaDescription }}">
@@ -197,11 +198,16 @@
                     @endphp
                     <ul class="nav-menus">
                         @if ($canDocumentation)
-                            <li class="d-none d-md-inline-block me-3">
-                                <a href="{{ route('documentation') }}" class="btn btn-primary doc-blink px-3">
-                                    <i class="fa fa-book me-2"></i>{{ __('system_documentation') }}
-                                </a>
-                            </li>
+                        <li class="d-none d-lg-inline-block me-3">
+                            <span class="badge rounded-pill bg-light text-dark border px-3 py-2 d-inline-flex align-items-center justify-content-center">
+                                <i class="fa fa-clock me-2 text-primary"></i>Time Zone: {{ $currentTimezone }}
+                            </span>
+                        </li>
+                        <li class="d-none d-md-inline-block me-3">
+                            <a href="{{ route('documentation') }}" class="btn btn-primary doc-blink px-3">
+                                <i class="fa fa-book me-2"></i>{{ __('system_documentation') }}
+                            </a>
+                        </li>
                         @endif
                         <li class="language-nav">
                             <div class="translate_wrapper">
@@ -261,7 +267,7 @@
                                 </div>
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
-                                @if (Auth::user()->hasRole(['Admin', 'Super Admin']))
+                                @if (Auth::user()->hasRole(['Admin', 'Super Admin', 'Manager']))
                                 <li><a href="{{ route('settings.index') }}"><i
                                             data-feather="settings"></i><span>{{ __('Settings') }}</span></a>
                                 </li>
@@ -288,4 +294,3 @@
         <!-- Page Header Ends                              -->
         <!-- Page body Start -->
         <div class="page-body-wrapper">
-

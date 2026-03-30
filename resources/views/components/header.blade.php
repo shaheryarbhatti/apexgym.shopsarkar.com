@@ -51,6 +51,12 @@
     $metaDescription = \App\Models\Setting::get('meta_description', 'Gym management system for memberships, attendance, and billing.');
     $metaAuthor = \App\Models\Setting::get('meta_author', 'Sky Fitness Gym');
     $currentTimezone = \App\Models\Setting::get('timezone', config('app.timezone', 'UTC'));
+    $headerBgColor = \App\Models\Setting::get('header_bg_color', '#ffffff');
+    $headerBgStart = \App\Models\Setting::get('header_bg_start', '');
+    $headerBgEnd = \App\Models\Setting::get('header_bg_end', '');
+    $headerBackground = ($headerBgStart && $headerBgEnd)
+        ? 'linear-gradient(90deg, ' . $headerBgStart . ' 0%, ' . $headerBgEnd . ' 100%)'
+        : $headerBgColor;
 @endphp
 <meta name="keywords" content="{{ $metaKeywords }}">
 <meta name="description" content="{{ $metaDescription }}">
@@ -167,7 +173,7 @@
     <!-- page-wrapper Start   -->
     <div class="page-wrapper compact-wrapper" id="pageWrapper">
         <!-- Page Header Start-->
-        <div class="page-header">
+        <div class="page-header" style="background: {{ $headerBackground }};">
             <div class="header-wrapper row m-0">
                 <div class="header-logo-wrapper col-auto p-0">
                     <div class="logo-wrapper"><a href="index.html"> <img class="img-fluid for-light"

@@ -2,10 +2,16 @@
     $themePrimary = \App\Models\Setting::get('theme_primary', '#7367f0');
     $themeSecondary = \App\Models\Setting::get('theme_secondary', '#00cfe8');
     $dashboardTextColor = \App\Models\Setting::get('sidebar_dashboard_text_color', '#ffffff');
+    $sidebarBgColor = \App\Models\Setting::get('sidebar_bg_color', '#ffffff');
+    $sidebarBgStart = \App\Models\Setting::get('sidebar_bg_start', '');
+    $sidebarBgEnd = \App\Models\Setting::get('sidebar_bg_end', '');
+    $sidebarBackground = ($sidebarBgStart && $sidebarBgEnd)
+        ? 'linear-gradient(180deg, ' . $sidebarBgStart . ' 0%, ' . $sidebarBgEnd . ' 100%)'
+        : $sidebarBgColor;
 @endphp
 <!-- Page Sidebar Start -->
 <div class="sidebar-wrapper" data-layout="stroke-svg"
-    style="background: linear-gradient(180deg, #ffffff 0%, #f6f8ff 100%); box-shadow: 0 10px 30px rgba(18, 38, 63, 0.08);">
+    style="background: {{ $sidebarBackground }}; box-shadow: 0 10px 30px rgba(18, 38, 63, 0.08);">
     <div>
         <div class="logo-wrapper" style="padding: 22px 18px 16px; border-bottom: 1px solid rgba(0,0,0,0.06);">
             <a class="logo" href="{{ route('home') }}">

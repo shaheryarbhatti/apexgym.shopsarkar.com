@@ -23,6 +23,12 @@
     $sidebarDashboardTextColor = \App\Models\Setting::get('sidebar_dashboard_text_color', '#ffffff');
     $timezoneValue = \App\Models\Setting::get('timezone', config('app.timezone', 'UTC'));
     $timezones = \DateTimeZone::listIdentifiers();
+    $sidebarBg = \App\Models\Setting::get('sidebar_bg_color', '#ffffff');
+    $headerBg = \App\Models\Setting::get('header_bg_color', '#ffffff');
+    $sidebarBgStart = \App\Models\Setting::get('sidebar_bg_start', '');
+    $sidebarBgEnd = \App\Models\Setting::get('sidebar_bg_end', '');
+    $headerBgStart = \App\Models\Setting::get('header_bg_start', '');
+    $headerBgEnd = \App\Models\Setting::get('header_bg_end', '');
 @endphp
 <script>
     window.gymCurrency = {
@@ -134,7 +140,6 @@
                                     {{ __('settings_guest_mode_block') }}
                                 </div>
                             @endif
-                            <fieldset {{ $guestMode ? 'disabled' : '' }}>
                             <ul class="nav nav-pills gap-2 flex-wrap settings-tabs">
                                 <li class="nav-item">
                                     <a class="nav-link" href="#settings-branding">{{ __('settings_tab_branding') }}</a>
@@ -173,7 +178,9 @@
                                     <a class="nav-link" href="#settings-card-design">{{ __('settings_tab_card_design') }}</a>
                                 </li>
                             </ul>
-                            <div class="row settings-section" id="settings-branding">
+                            <div class="settings-section" id="settings-branding">
+                                <fieldset {{ $guestMode ? 'disabled' : '' }}>
+                                <div class="row">
                                 <div class="col-sm-12 mb-4">
                                     <label class="form-label fw-bold">{{ __('footer_text') }}</label>
                                     <input type="text" name="footer_text" class="form-control"
@@ -216,7 +223,396 @@
                                              style="max-height: 48px; width: auto;">
                                     </div>
                                 </div>
+
+                                <div class="col-xl-4 col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_sidebar_bg_gradient') }}</label>
+                                    <div class="input-group mb-2">
+                                        <input type="color" name="sidebar_bg_start" class="form-control form-control-color"
+                                               value="{{ $sidebarBgStart ?: $sidebarBg }}">
+                                        <input type="text" name="sidebar_bg_start_text" class="form-control"
+                                               value="{{ $sidebarBgStart ?: $sidebarBg }}" placeholder="#ffffff">
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="color" name="sidebar_bg_end" class="form-control form-control-color"
+                                               value="{{ $sidebarBgEnd ?: $sidebarBg }}">
+                                        <input type="text" name="sidebar_bg_end_text" class="form-control"
+                                               value="{{ $sidebarBgEnd ?: $sidebarBg }}" placeholder="#ffffff">
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_header_bg_gradient') }}</label>
+                                    <div class="input-group mb-2">
+                                        <input type="color" name="header_bg_start" class="form-control form-control-color"
+                                               value="{{ $headerBgStart ?: $headerBg }}">
+                                        <input type="text" name="header_bg_start_text" class="form-control"
+                                               value="{{ $headerBgStart ?: $headerBg }}" placeholder="#ffffff">
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="color" name="header_bg_end" class="form-control form-control-color"
+                                               value="{{ $headerBgEnd ?: $headerBg }}">
+                                        <input type="text" name="header_bg_end_text" class="form-control"
+                                               value="{{ $headerBgEnd ?: $headerBg }}" placeholder="#ffffff">
+                                    </div>
+                                </div>
+                                </div>
+                                </fieldset>
+                                {{--
+                                <div class="row">
+                                <div class="col-12">
+                                    <div class="border rounded-3 p-3 bg-light">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
+                                            <div>
+                                                <h6 class="mb-1">{{ __('settings_color_suggestions') }}</h6>
+                                                <p class="text-muted mb-0">{{ __('settings_color_suggestions_desc') }}</p>
+                                            </div>
+                                            <div class="d-flex flex-column align-items-start align-items-sm-end gap-1">
+                                                <span class="text-muted small fw-semibold">{{ __('settings_color_tone') }}</span>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span id="colorToneLabel" class="badge rounded-pill text-bg-light border">{{ __('settings_color_tone_neutral') }}</span>
+                                                    <input type="range" class="form-range" id="colorSuggestionTone" min="0" max="100" value="50" style="width: 180px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-muted small mb-3">{{ __('settings_color_tone_hint') }}</p>
+                                        <div id="colorSuggestionCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="12000">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#e0f2fe;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f0f9ff;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#E0F2FE → #F0F9FF</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#eef2ff;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f8fafc;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#EEF2FF → #F8FAFC</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fff7ed;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fffbeb;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#FFF7ED → #FFFBEB</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fef3c7;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fef9c3;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#FEF3C7 → #FEF9C3</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fdf2f8;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fce7f3;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#FDF2F8 → #FCE7F3</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#e0f2fe;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#eff6ff;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#E0F2FE → #EFF6FF</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#e2e8f0;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f1f5f9;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#E2E8F0 → #F1F5F9</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#e7e5ff;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f5f3ff;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#E7E5FF → #F5F3FF</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#ecfccb;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f7fee7;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#ECFCCB → #F7FEE7</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#dbeafe;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#eff6ff;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#DBEAFE → #EFF6FF</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fee2e2;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fef2f2;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#FEE2E2 → #FEF2F2</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f3e8ff;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#faf5ff;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#F3E8FF → #FAF5FF</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0f172a;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#1f2937;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0F172A → #1F2937</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#111827;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0b1120;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#111827 → #0B1120</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#1e293b;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#334155;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#1E293B → #334155</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0f172a;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#111827;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0F172A → #111827</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0b1220;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#1e1b4b;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0B1220 → #1E1B4B</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0f172a;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#1f2937;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0F172A → #1F2937</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f0f4ff;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#e9f2ff;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#F0F4FF → #E9F2FF</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fdf4ff;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fff7fb;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#FDF4FF → #FFF7FB</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#ecfeff;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f0fdfa;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#ECFEFF → #F0FDFA</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f0fdf4;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#ecfccb;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#F0FDF4 → #ECFCCB</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f5f5f4;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#fafaf9;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#F5F5F4 → #FAFAF9</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#e0f2f1;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#f0fdfa;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#E0F2F1 → #F0FDFA</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#111827;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#1f2937;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#111827 → #1F2937</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0f172a;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#111827;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0F172A → #111827</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#1f2937;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#374151;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#1F2937 → #374151</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0b1020;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#111827;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0B1020 → #111827</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="p-3 border rounded-3 bg-white">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span class="fw-semibold">{{ __('settings_header_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0b1120;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#1e293b;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0B1120 → #1E293B</div>
+                                                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                                                    <span class="fw-semibold">{{ __('settings_sidebar_color') }}</span>
+                                                                    <div class="d-flex gap-2">
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#0a0f1a;"></span>
+                                                                        <span class="rounded-circle d-inline-block" style="width: 18px; height: 18px; background:#111827;"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-muted small">#0A0F1A → #111827</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#colorSuggestionCarousel" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#colorSuggestionCarousel" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                --}}
                             </div>
+                            <fieldset {{ $guestMode ? 'disabled' : '' }}>
 
                             <hr class="my-4">
 
@@ -642,6 +1038,12 @@
             { color: 'theme_primary', text: 'theme_primary_text' },
             { color: 'theme_secondary', text: 'theme_secondary_text' },
             { color: 'theme_accent', text: 'theme_accent_text' },
+            { color: 'sidebar_bg_color', text: 'sidebar_bg_color_text' },
+            { color: 'header_bg_color', text: 'header_bg_color_text' },
+            { color: 'sidebar_bg_start', text: 'sidebar_bg_start_text' },
+            { color: 'sidebar_bg_end', text: 'sidebar_bg_end_text' },
+            { color: 'header_bg_start', text: 'header_bg_start_text' },
+            { color: 'header_bg_end', text: 'header_bg_end_text' },
             { color: 'card_bg_color', text: 'card_bg_color_text' },
             { color: 'card_text_color', text: 'card_text_color_text' },
             { color: 'sidebar_dashboard_text_color', text: 'sidebar_dashboard_text_color_text' },
@@ -696,6 +1098,41 @@
             }
         };
 
+        const updateLayoutPreview = () => {
+            const sidebar = document.querySelector('.sidebar-wrapper');
+            const header = document.querySelector('.page-header');
+            if (!sidebar && !header) return;
+
+            const getValue = (name) => {
+                const text = document.querySelector(`input[name="${name}_text"]`);
+                const color = document.querySelector(`input[name="${name}"]`);
+                if (text && isHex(text.value)) return text.value;
+                if (color && isHex(color.value)) return color.value;
+                return '';
+            };
+
+            const sidebarStart = getValue('sidebar_bg_start');
+            const sidebarEnd = getValue('sidebar_bg_end');
+            const headerStart = getValue('header_bg_start');
+            const headerEnd = getValue('header_bg_end');
+
+            if (sidebar) {
+                if (sidebarStart && sidebarEnd) {
+                    sidebar.style.background = `linear-gradient(180deg, ${sidebarStart} 0%, ${sidebarEnd} 100%)`;
+                } else if (sidebarStart) {
+                    sidebar.style.background = sidebarStart;
+                }
+            }
+
+            if (header) {
+                if (headerStart && headerEnd) {
+                    header.style.background = `linear-gradient(90deg, ${headerStart} 0%, ${headerEnd} 100%)`;
+                } else if (headerStart) {
+                    header.style.background = headerStart;
+                }
+            }
+        };
+
         const bgInput = document.querySelector('input[name="card_bg_color"]');
         const textColorInput = document.querySelector('input[name="card_text_color"]');
         const titleInput = document.querySelector('input[name="card_title"]');
@@ -705,6 +1142,20 @@
         if (titleInput) titleInput.addEventListener('input', updateCardPreview);
         logoRadios.forEach((radio) => radio.addEventListener('change', updateCardPreview));
         updateCardPreview();
+        updateLayoutPreview();
+
+        const layoutInputs = [
+            'sidebar_bg_start',
+            'sidebar_bg_end',
+            'header_bg_start',
+            'header_bg_end'
+        ];
+        layoutInputs.forEach((name) => {
+            const color = document.querySelector(`input[name="${name}"]`);
+            const text = document.querySelector(`input[name="${name}_text"]`);
+            if (color) color.addEventListener('input', updateLayoutPreview);
+            if (text) text.addEventListener('input', updateLayoutPreview);
+        });
     })();
 
     (function() {

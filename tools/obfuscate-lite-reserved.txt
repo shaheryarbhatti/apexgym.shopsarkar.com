@@ -78,4 +78,14 @@ trainerPhotos
 photoPath
 timezones
 timezoneValue
+sidebarBg
+headerBg
+sidebarBgColor
+headerBgColor
+sidebarBgStart
+sidebarBgEnd
+headerBgStart
+headerBgEnd
+sidebarBackground
+headerBackground
 user

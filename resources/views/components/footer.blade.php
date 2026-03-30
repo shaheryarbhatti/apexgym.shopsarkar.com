@@ -6,7 +6,8 @@
                 <p class="mb-0 text-muted">
                     &copy; {!! \App\Models\Setting::get('footer_text', 'Copyright ' . date('Y') . ' <strong> © Sky Fitness Gym</strong>.') !!}.
                     Developed with excellence by
-                    <a href="javascript:void(0)"
+                    <a href="https://www.linkedin.com/in/shaheryar-bhatti-383553110"
+                    target="_blank"
                        class="text-primary text-decoration-none fw-semibold">
                        Shaheryar Bhatti
                     </a>

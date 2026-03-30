@@ -800,6 +800,13 @@
     </div>
     @endsection
 
+    @php
+        $activeCurrency = \App\Services\CurrencyService::getActiveCurrency();
+        $currencyLabel = $activeCurrency ? trim($activeCurrency->symbol . ' ' . $activeCurrency->code) : 'Rp';
+        $currencyCode = $activeCurrency ? $activeCurrency->code : 'IDR';
+        $currencyDecimals = $currencyCode === 'IDR' ? 0 : 2;
+    @endphp
+
     @push('scripts')
     <script>
         window.addEventListener('load', () => {
@@ -818,6 +825,13 @@
             const success = '#22c55e';
             const warning = '#f59e0b';
             const info = '#38bdf8';
+            const currencyLabel = @json($currencyLabel);
+            const currencyDecimals = @json($currencyDecimals);
+            const currencyFormat = new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: currencyDecimals,
+                maximumFractionDigits: currencyDecimals
+            });
+            const formatCurrency = (value) => `${currencyLabel} ${currencyFormat.format(value || 0)}`;
 
             const baseOptions = {
                 chart: { height: 280, toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 800 } },
@@ -851,6 +865,8 @@
                 ...baseOptions,
                 chart: { ...baseOptions.chart, type: 'bar' },
                 series: [{ name: 'Invoices', data: invoiceData }],
+                yaxis: { labels: { style: { colors: '#6b7280' }, formatter: formatCurrency } },
+                tooltip: { theme: 'light', y: { formatter: formatCurrency } },
                 plotOptions: { bar: { columnWidth: '45%', borderRadius: 10 } },
                 colors: [success]
             });
@@ -859,6 +875,8 @@
                 ...baseOptions,
                 chart: { ...baseOptions.chart, type: 'line' },
                 series: [{ name: 'Trainer Invoices', data: trainerInvoiceData }],
+                yaxis: { labels: { style: { colors: '#6b7280' }, formatter: formatCurrency } },
+                tooltip: { theme: 'light', y: { formatter: formatCurrency } },
                 stroke: { curve: 'straight', width: 2, dashArray: 6 },
                 markers: { size: 4, strokeWidth: 0 },
                 colors: [warning]

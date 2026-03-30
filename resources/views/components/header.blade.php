@@ -54,9 +54,14 @@
     $headerBgColor = \App\Models\Setting::get('header_bg_color', '#ffffff');
     $headerBgStart = \App\Models\Setting::get('header_bg_start', '');
     $headerBgEnd = \App\Models\Setting::get('header_bg_end', '');
+    $headerTexture = \App\Models\Setting::get('header_texture', '');
+    $headerTextureUrl = $headerTexture ? asset('public/' . $headerTexture) : '';
     $headerBackground = ($headerBgStart && $headerBgEnd)
         ? 'linear-gradient(90deg, ' . $headerBgStart . ' 0%, ' . $headerBgEnd . ' 100%)'
         : $headerBgColor;
+    $headerBackgroundStyle = $headerTextureUrl
+        ? "background-image: url('{$headerTextureUrl}'), {$headerBackground}; background-repeat: no-repeat, no-repeat; background-size: 100% 100%, cover; background-position: center;"
+        : "background: {$headerBackground};";
 @endphp
 <meta name="keywords" content="{{ $metaKeywords }}">
 <meta name="description" content="{{ $metaDescription }}">
@@ -205,7 +210,7 @@
     <!-- page-wrapper Start   -->
     <div class="page-wrapper compact-wrapper" id="pageWrapper">
         <!-- Page Header Start-->
-        <div class="page-header" style="background: {{ $headerBackground }};">
+        <div class="page-header" data-texture="{{ $headerTextureUrl }}" data-base-bg="{{ $headerBackground }}" style="{{ $headerBackgroundStyle }}">
             <div class="header-wrapper row m-0">
                 <div class="header-logo-wrapper col-auto p-0">
                     <div class="logo-wrapper"><a href="index.html"> <img class="img-fluid for-light"

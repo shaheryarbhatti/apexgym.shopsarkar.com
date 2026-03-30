@@ -7,9 +7,14 @@
     $logoOverlayColor = \App\Models\Setting::get('logo_overlay_color', '');
     $logoOverlayClass = $logoOverlayColor ? 'has-overlay' : '';
     $adminLogoUrl = asset('public/' . \App\Models\Setting::get('admin_logo', 'assets/images/logo/logo-icon.png'));
+    $sidebarTexture = \App\Models\Setting::get('sidebar_texture', '');
+    $sidebarTextureUrl = $sidebarTexture ? asset('public/' . $sidebarTexture) : '';
     $sidebarBackground = ($sidebarBgStart && $sidebarBgEnd)
         ? 'linear-gradient(180deg, ' . $sidebarBgStart . ' 0%, ' . $sidebarBgEnd . ' 100%)'
         : $sidebarBgColor;
+    $sidebarBackgroundStyle = $sidebarTextureUrl
+        ? "background-image: url('{$sidebarTextureUrl}'), {$sidebarBackground}; background-repeat: no-repeat, no-repeat; background-size: 100% 100%, cover; background-position: center;"
+        : "background: {$sidebarBackground};";
 @endphp
 <style>
     .sidebar-wrapper .sidebar-link .fa-angle-right,
@@ -22,7 +27,9 @@
 </style>
 <!-- Page Sidebar Start -->
 <div class="sidebar-wrapper" data-layout="stroke-svg"
-    style="background: {{ $sidebarBackground }}; box-shadow: 0 10px 30px rgba(18, 38, 63, 0.08);">
+    data-texture="{{ $sidebarTextureUrl }}"
+    data-base-bg="{{ $sidebarBackground }}"
+    style="{{ $sidebarBackgroundStyle }} box-shadow: 0 10px 30px rgba(18, 38, 63, 0.08);">
     <div>
         <div class="logo-wrapper" style="padding: 22px 18px 16px; border-bottom: 1px solid rgba(0,0,0,0.06);">
             <a class="logo" href="{{ route('home') }}">

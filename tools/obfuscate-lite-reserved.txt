@@ -89,6 +89,8 @@ headerBgEnd
 sidebarTabBg
 sidebarTabText
 logoOverlayColor
+sidebarTexture
+headerTexture
 sidebarBackground
 headerBackground
 user

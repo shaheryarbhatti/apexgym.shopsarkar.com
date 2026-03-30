@@ -32,8 +32,6 @@
     $sidebarTabBg = \App\Models\Setting::get('sidebar_tab_bg_color', '#ffffff');
     $sidebarTabText = \App\Models\Setting::get('sidebar_tab_text_color', '#2a2f45');
     $logoOverlayColor = \App\Models\Setting::get('logo_overlay_color', '');
-    $sidebarTexture = \App\Models\Setting::get('sidebar_texture', '');
-    $headerTexture = \App\Models\Setting::get('header_texture', '');
 @endphp
 <script>
     window.gymCurrency = {
@@ -229,29 +227,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-4 col-md-6 mb-3">
-                                    <label class="form-label fw-bold">{{ __('settings_sidebar_texture') }}</label>
-                                    <input type="file" name="sidebar_texture" class="form-control mb-2" accept="image/png,image/jpeg" {{ $guestMode ? 'disabled' : '' }}>
-                                    <div class="preview-box border p-2 text-center bg-light">
-                                        @if ($sidebarTexture)
-                                            <img src="{{ asset('public/' . $sidebarTexture) }}" style="max-height: 60px; width: auto;">
-                                        @else
-                                            <span class="text-muted small">{{ __('settings_texture_hint') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-4 col-md-6 mb-3">
-                                    <label class="form-label fw-bold">{{ __('settings_header_texture') }}</label>
-                                    <input type="file" name="header_texture" class="form-control mb-2" accept="image/png,image/jpeg" {{ $guestMode ? 'disabled' : '' }}>
-                                    <div class="preview-box border p-2 text-center bg-light">
-                                        @if ($headerTexture)
-                                            <img src="{{ asset('public/' . $headerTexture) }}" style="max-height: 60px; width: auto;">
-                                        @else
-                                            <span class="text-muted small">{{ __('settings_texture_hint') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
 
                                 <div class="col-xl-4 col-md-6 mb-3">
                                     <label class="form-label fw-bold">{{ __('settings_sidebar_bg_gradient') }}</label>
@@ -1180,36 +1155,19 @@
             const tabText = getValue('sidebar_tab_text_color');
             const logoOverlay = getValue('logo_overlay_color');
 
-            const applyWithTexture = (element, gradient, angle) => {
-                const texture = element?.dataset?.texture || '';
-                if (!element) return;
-                if (texture) {
-                    element.style.backgroundImage = `url('${texture}'), ${gradient}`;
-                    element.style.backgroundRepeat = 'no-repeat, no-repeat';
-                    element.style.backgroundSize = '100% 100%, cover';
-                    element.style.backgroundPosition = 'center';
-                } else {
-                    element.style.background = gradient;
-                    element.style.removeProperty('background-image');
-                    element.style.removeProperty('background-repeat');
-                    element.style.removeProperty('background-size');
-                    element.style.removeProperty('background-position');
-                }
-            };
-
             if (sidebar) {
                 if (sidebarStart && sidebarEnd) {
-                    applyWithTexture(sidebar, `linear-gradient(180deg, ${sidebarStart} 0%, ${sidebarEnd} 100%)`);
+                    sidebar.style.background = `linear-gradient(180deg, ${sidebarStart} 0%, ${sidebarEnd} 100%)`;
                 } else if (sidebarStart) {
-                    applyWithTexture(sidebar, sidebarStart);
+                    sidebar.style.background = sidebarStart;
                 }
             }
 
             if (header) {
                 if (headerStart && headerEnd) {
-                    applyWithTexture(header, `linear-gradient(90deg, ${headerStart} 0%, ${headerEnd} 100%)`);
+                    header.style.background = `linear-gradient(90deg, ${headerStart} 0%, ${headerEnd} 100%)`;
                 } else if (headerStart) {
-                    applyWithTexture(header, headerStart);
+                    header.style.background = headerStart;
                 }
             }
 

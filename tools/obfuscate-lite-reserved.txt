@@ -86,6 +86,9 @@ sidebarBgStart
 sidebarBgEnd
 headerBgStart
 headerBgEnd
+sidebarTabBg
+sidebarTabText
+logoOverlayColor
 sidebarBackground
 headerBackground
 user

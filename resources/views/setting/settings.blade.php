@@ -29,6 +29,9 @@
     $sidebarBgEnd = \App\Models\Setting::get('sidebar_bg_end', '');
     $headerBgStart = \App\Models\Setting::get('header_bg_start', '');
     $headerBgEnd = \App\Models\Setting::get('header_bg_end', '');
+    $sidebarTabBg = \App\Models\Setting::get('sidebar_tab_bg_color', '#ffffff');
+    $sidebarTabText = \App\Models\Setting::get('sidebar_tab_text_color', '#2a2f45');
+    $logoOverlayColor = \App\Models\Setting::get('logo_overlay_color', '');
 @endphp
 <script>
     window.gymCurrency = {
@@ -253,6 +256,35 @@
                                                value="{{ $headerBgEnd ?: $headerBg }}">
                                         <input type="text" name="header_bg_end_text" class="form-control"
                                                value="{{ $headerBgEnd ?: $headerBg }}" placeholder="#ffffff">
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_sidebar_tab_bg_color') }}</label>
+                                    <div class="input-group">
+                                        <input type="color" name="sidebar_tab_bg_color" class="form-control form-control-color"
+                                               value="{{ $sidebarTabBg }}">
+                                        <input type="text" name="sidebar_tab_bg_color_text" class="form-control"
+                                               value="{{ $sidebarTabBg }}" placeholder="#ffffff">
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_sidebar_tab_text_color') }}</label>
+                                    <div class="input-group">
+                                        <input type="color" name="sidebar_tab_text_color" class="form-control form-control-color"
+                                               value="{{ $sidebarTabText }}">
+                                        <input type="text" name="sidebar_tab_text_color_text" class="form-control"
+                                               value="{{ $sidebarTabText }}" placeholder="#2a2f45">
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 mb-3">
+                                    <label class="form-label fw-bold">{{ __('settings_logo_overlay_color') }}</label>
+                                    <div class="input-group">
+                                        <input type="color" name="logo_overlay_color" class="form-control form-control-color"
+                                               value="{{ $logoOverlayColor ?: '#ffffff' }}">
+                                        <input type="text" name="logo_overlay_color_text" class="form-control"
+                                               value="{{ $logoOverlayColor }}" placeholder="#ffffff">
                                     </div>
                                 </div>
                                 </div>
@@ -1044,6 +1076,9 @@
             { color: 'sidebar_bg_end', text: 'sidebar_bg_end_text' },
             { color: 'header_bg_start', text: 'header_bg_start_text' },
             { color: 'header_bg_end', text: 'header_bg_end_text' },
+            { color: 'sidebar_tab_bg_color', text: 'sidebar_tab_bg_color_text' },
+            { color: 'sidebar_tab_text_color', text: 'sidebar_tab_text_color_text' },
+            { color: 'logo_overlay_color', text: 'logo_overlay_color_text' },
             { color: 'card_bg_color', text: 'card_bg_color_text' },
             { color: 'card_text_color', text: 'card_text_color_text' },
             { color: 'sidebar_dashboard_text_color', text: 'sidebar_dashboard_text_color_text' },
@@ -1115,6 +1150,9 @@
             const sidebarEnd = getValue('sidebar_bg_end');
             const headerStart = getValue('header_bg_start');
             const headerEnd = getValue('header_bg_end');
+            const tabBg = getValue('sidebar_tab_bg_color');
+            const tabText = getValue('sidebar_tab_text_color');
+            const logoOverlay = getValue('logo_overlay_color');
 
             if (sidebar) {
                 if (sidebarStart && sidebarEnd) {
@@ -1131,6 +1169,35 @@
                     header.style.background = headerStart;
                 }
             }
+
+            if (tabBg || tabText) {
+                document.querySelectorAll('.sidebar-link.link-nav, .sidebar-link.sidebar-title').forEach((el) => {
+                    if (tabBg) {
+                        el.style.background = tabBg;
+                    }
+                    if (tabText) {
+                        el.style.color = tabText;
+                        el.querySelectorAll('i, span, .fa-angle-right, .fa-angle-left, .fa-angle-down, .according-menu i').forEach((node) => {
+                            node.style.color = tabText;
+                        });
+                    }
+                });
+                document.querySelectorAll('.sidebar-wrapper .according-menu i').forEach((node) => {
+                    if (tabText) {
+                        node.style.color = tabText;
+                    }
+                });
+                document.querySelectorAll('.sidebar-submenu a').forEach((el) => {
+                    if (tabText) {
+                        el.style.color = tabText;
+                    }
+                });
+            }
+
+            document.querySelectorAll('.logo-overlay-wrap').forEach((wrap) => {
+                wrap.style.setProperty('--logo-color', logoOverlay || 'transparent');
+                wrap.classList.toggle('has-overlay', !!logoOverlay);
+            });
         };
 
         const bgInput = document.querySelector('input[name="card_bg_color"]');
@@ -1150,7 +1217,18 @@
             'header_bg_start',
             'header_bg_end'
         ];
+        const extraLayoutInputs = [
+            'sidebar_tab_bg_color',
+            'sidebar_tab_text_color',
+            'logo_overlay_color'
+        ];
         layoutInputs.forEach((name) => {
+            const color = document.querySelector(`input[name="${name}"]`);
+            const text = document.querySelector(`input[name="${name}_text"]`);
+            if (color) color.addEventListener('input', updateLayoutPreview);
+            if (text) text.addEventListener('input', updateLayoutPreview);
+        });
+        extraLayoutInputs.forEach((name) => {
             const color = document.querySelector(`input[name="${name}"]`);
             const text = document.querySelector(`input[name="${name}_text"]`);
             if (color) color.addEventListener('input', updateLayoutPreview);

@@ -143,6 +143,38 @@
         color: #ffffff !important;
     }
 
+    .logo-overlay-wrap {
+        position: relative;
+        display: inline-block;
+    }
+
+    .logo-overlay-wrap .logo-img {
+        display: block;
+    }
+
+    .logo-overlay-mask {
+        position: absolute;
+        inset: 0;
+        background: var(--logo-color, transparent);
+        -webkit-mask-image: var(--logo-url);
+        mask-image: var(--logo-url);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+        display: none;
+    }
+
+    .logo-overlay-wrap.has-overlay .logo-img {
+        opacity: 0;
+    }
+
+    .logo-overlay-wrap.has-overlay .logo-overlay-mask {
+        display: block;
+    }
+
     .doc-blink {
         animation: docPulse 1.8s ease-in-out infinite;
         box-shadow: 0 0 0 rgba(79, 70, 229, 0.5);

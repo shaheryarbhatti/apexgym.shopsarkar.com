@@ -933,24 +933,45 @@
                                 </div>
                             </div>
 
-                            <!-- <hr class="my-4">
+                            <hr class="my-4">
+
+                            @php
+                                $freezeUpdatedAt = \App\Models\Setting::where('key', 'freeze_membership_price')->max('updated_at');
+                                $freezeUpdatedAt = $freezeUpdatedAt ? \Carbon\Carbon::parse($freezeUpdatedAt) : null;
+                            @endphp
 
                             <div class="row settings-section" id="settings-freeze-price">
-                                <div class="col-12 mb-2">
-                                    <h5 class="mb-1">{{ __('settings_freeze_membership_price') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('settings_freeze_membership_price_desc') }}</p>
-                                </div>
-
                                 <div class="col-12">
-                                    <div class="border rounded-3 p-3 bg-light">
-                                        <label class="form-label text-dark fw-bold mb-2">{{ __('settings_freeze_price_label', ['currency' => $baseLabel]) }}</label>
-                                        <input type="text" name="freeze_membership_price" id="freeze_membership_price" class="form-control"
-                                               value="{{ \App\Models\Setting::get('freeze_membership_price', '') }}"
-                                               placeholder="{{ __('settings_price_placeholder', ['currency' => $baseLabel]) }}">
-                                        <small class="text-muted d-block mt-2" id="freeze_membership_preview"></small>
+                                    <div class="card border-0 shadow-sm" style="border-radius: 18px;">
+                                        <div class="card-header d-flex align-items-center justify-content-between" style="border-radius: 18px 18px 0 0; background: #f3f7ff;">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="d-inline-flex align-items-center justify-content-center"
+                                                    style="width: 44px; height: 44px; border-radius: 12px; background: rgba(96,165,250,0.2); color: #2563eb;">
+                                                    <i class="fa fa-snowflake-o"></i>
+                                                </span>
+                                                <div>
+                                                    <h5 class="mb-0">{{ __('settings_freeze_membership_price') }}</h5>
+                                                    <small class="text-muted">{{ __('settings_freeze_membership_price_desc') }}</small>
+                                                </div>
+                                            </div>
+                                            <span class="badge rounded-pill bg-light text-primary border">
+                                                {{ __('settings_last_updated') }}: {{ $freezeUpdatedAt ? $freezeUpdatedAt->format('d M Y - H:i:s') : '-' }}
+                                            </span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <label class="form-label text-dark fw-bold mb-2">{{ __('settings_freeze_price_label', ['currency' => $baseLabel]) }}</label>
+                                                    <input type="text" name="freeze_membership_price" id="freeze_membership_price" class="form-control"
+                                                           value="{{ \App\Models\Setting::get('freeze_membership_price', '') }}"
+                                                           placeholder="{{ __('settings_price_placeholder', ['currency' => $baseLabel]) }}">
+                                                    <small class="text-muted d-block mt-2" id="freeze_membership_preview"></small>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
 
                             <hr class="my-4">
 

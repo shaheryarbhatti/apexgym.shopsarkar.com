@@ -30,6 +30,11 @@
         $canMemberVisit = $user && $user->canAny(['members.add_visit_invoice', $legacyMemberBase . '.add_visit_invoice']);
         $canMemberExpiry = $user && $user->canAny(['members.send_expiry_email', $legacyMemberBase . '.send_expiry_email']);
         $canMemberDownload = $user && $user->canAny(['members.download_card', $legacyMemberBase . '.download_card']);
+        $canMemberFreeze = $user && $user->canAny(['members.freeze', $legacyMemberBase . '.freeze']);
+        $baseCurrencyCode = \App\Models\Setting::get('base_currency_code', 'IDR');
+        $baseCurrency = \App\Models\Currency::where('code', $baseCurrencyCode)->first();
+        $baseLabel = $baseCurrency ? trim($baseCurrency->symbol . ' ' . $baseCurrency->code) : $baseCurrencyCode;
+        $freezePriceDefault = \App\Models\Setting::get('freeze_membership_price', '');
     @endphp
 
     <div class="page-body">
@@ -80,6 +85,7 @@
                                         <th>{{ __('full_name') }}</th>
                                         <th>{{ __('email') }}</th>
                                         <th>{{ __('phone') }}</th>
+                                        <th>{{ __('freeze_status') }}</th>
                                         <th>{{ __('status') }}</th>
                                         <th>{{ __('action') }}</th>
                                     </tr>
@@ -103,9 +109,11 @@
             </div>
             <div class="modal-body">
                 <div class="d-flex flex-wrap justify-content-end gap-2 mb-4">
-                    <!-- <button type="button" class="btn btn-primary">
-                        <i class="fa fa-snowflake-o me-2"></i> {{ __('freeze_membership') }}
-                    </button> -->
+                    @if($canMemberFreeze)
+                        <button type="button" class="btn btn-primary" id="freezeMemberBtn">
+                            <i class="fa fa-snowflake-o me-2"></i> {{ __('freeze_membership') }}
+                        </button>
+                    @endif
                     @if($canMemberRenew)
                         <a href="#" class="btn btn-primary" id="renewMembershipBtn">
                             <i class="fa fa-refresh me-2"></i> {{ __('renew_membership') }}
@@ -206,6 +214,47 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="freezeMemberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ __('freeze_membership') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" id="freezeMemberForm">
+                @csrf
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">{{ __('freeze_price_label', ['currency' => $baseLabel]) }}</label>
+                            <input type="text" name="freeze_price" id="freezePriceInput" class="form-control"
+                                   value="{{ $freezePriceDefault }}"
+                                   placeholder="{{ __('settings_price_placeholder', ['currency' => $baseLabel]) }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">{{ __('freeze_start_date') }}</label>
+                            <input type="date" name="freeze_start_date" id="freezeStartInput" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">{{ __('freeze_end_date') }}</label>
+                            <input type="date" name="freeze_end_date" id="freezeEndInput" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <div class="alert alert-light border mb-0">
+                                {{ __('freeze_member_note') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('save_freeze') }}</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -510,6 +559,12 @@
                     defaultContent: '-'
                 },
                 {
+                    data: 'freeze_status',
+                    name: 'freeze_status',
+                    orderable: false,
+                    searchable: false
+                },
+                {
                     data: 'status',
                     name: 'status'
                 },
@@ -555,6 +610,10 @@
         const downloadBtn = document.getElementById('downloadCardBtn');
         if (downloadBtn) {
             downloadBtn.dataset.memberCode = payload.member_code || 'member';
+        }
+        const freezeBtn = document.getElementById('freezeMemberBtn');
+        if (freezeBtn) {
+            freezeBtn.dataset.member = JSON.stringify(payload);
         }
 
         const setText = (id, value) => {
@@ -615,6 +674,61 @@
             modal.show();
         }
     });
+
+    $(document).on('click', '.js-member-freeze', function() {
+        const payload = this.dataset.member ? JSON.parse(this.dataset.member) : {};
+        const form = document.getElementById('freezeMemberForm');
+        if (form && payload.id) {
+            form.action = `{{ url('/members') }}/${payload.id}/freeze`;
+        }
+        const priceInput = document.getElementById('freezePriceInput');
+        const startInput = document.getElementById('freezeStartInput');
+        const endInput = document.getElementById('freezeEndInput');
+        if (priceInput) {
+            priceInput.value = payload.freeze_price ?? '{{ $freezePriceDefault }}';
+        }
+        if (startInput) {
+            startInput.value = payload.freeze_start_date || '';
+        }
+        if (endInput) {
+            endInput.value = payload.freeze_end_date || '';
+        }
+
+        const modalEl = document.getElementById('freezeMemberModal');
+        if (modalEl) {
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
+    });
+
+    const freezeMemberBtn = document.getElementById('freezeMemberBtn');
+    if (freezeMemberBtn) {
+        freezeMemberBtn.addEventListener('click', () => {
+            const payload = freezeMemberBtn.dataset.member ? JSON.parse(freezeMemberBtn.dataset.member) : {};
+            const form = document.getElementById('freezeMemberForm');
+            if (form && payload.id) {
+                form.action = `{{ url('/members') }}/${payload.id}/freeze`;
+            }
+            const priceInput = document.getElementById('freezePriceInput');
+            const startInput = document.getElementById('freezeStartInput');
+            const endInput = document.getElementById('freezeEndInput');
+            if (priceInput) {
+                priceInput.value = payload.freeze_price ?? '{{ $freezePriceDefault }}';
+            }
+            if (startInput) {
+                startInput.value = payload.freeze_start_date || '';
+            }
+            if (endInput) {
+                endInput.value = payload.freeze_end_date || '';
+            }
+
+            const modalEl = document.getElementById('freezeMemberModal');
+            if (modalEl) {
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+        });
+    }
 
     const downloadCardBtn = document.getElementById('downloadCardBtn');
     if (downloadCardBtn) {

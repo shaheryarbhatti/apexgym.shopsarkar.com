@@ -89,8 +89,11 @@ headerBgEnd
 sidebarTabBg
 sidebarTabText
 logoOverlayColor
-sidebarTexture
-headerTexture
 sidebarBackground
 headerBackground
+canFreeze
+freeze_status
+freeze_start_date
+freeze_end_date
+freeze_price
 user

@@ -173,6 +173,11 @@
                                                         </label>
                                                         <label class="form-check small d-flex align-items-center gap-2">
                                                             <input class="form-check-input action-checkbox" type="checkbox"
+                                                                name="permissions[]" value="members.freeze">
+                                                            <span>{{ __('permission_freeze_membership') }}</span>
+                                                        </label>
+                                                        <label class="form-check small d-flex align-items-center gap-2">
+                                                            <input class="form-check-input action-checkbox" type="checkbox"
                                                                 name="permissions[]" value="members.export">
                                                             <span>{{ __('permission_export_members') }}</span>
                                                         </label>

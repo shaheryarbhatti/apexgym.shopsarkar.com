@@ -20,6 +20,31 @@
     .sidebar-wrapper .sidebar-link .according-menu i {
         color: {{ $sidebarTabText }} !important;
     }
+
+    .sidebar-wrapper .logo-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .sidebar-wrapper .logo-wrapper .logo {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sidebar-wrapper .logo-wrapper .logo-overlay-wrap {
+        margin: 0 auto;
+    }
+
+    .sidebar-wrapper .logo-wrapper .toggle-sidebar {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
 </style>
 <!-- Page Sidebar Start -->
 <div class="sidebar-wrapper" data-layout="stroke-svg"
